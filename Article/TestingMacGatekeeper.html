@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html class="no-js">
+  <head>
+    <link rel="stylesheet" href="../style/main.css">
+  </head>
+
+  <body>
+  <div class="container">
+    <div id='header'>
+      <ol class="row">
+        <li><a class="site" href="/index.html">Blog</a></li>
+        <li><a class="site" href="/index.html">RSS</a></li>
+      </ol> 
+    </div>
+
+    <div class="ruler container"></div>
+    <div class="container">
+      <article>
+        <h1>Testing Mac Gatekeeper</h1>
+        <h2>Testing Notes</h2>
+<p>Gatekeeper on Mac guards against the execution of any application from unknown developers, here are some
+short notes when testing application compliance.</p>
+<p>The key gotcha to watch out for when testing is to ensure the executable has been quarantined.
+By that I mean it has the ''com.apple.quarantine'' extended attribute present as Gatekeeper policy
+is specifically aimed the first time you execute quarantined files.</p>
+<p>The easiest way to accomplish this is to email the application to yourself. Applications that download
+arbitrary content mark them for quarantine automatically, this includes major browsers or email
+clients.</p>
+<p>To verify the quarantine attribute, show file permissions and look for a '@' sign or better yet
+use the 'xattr' command to specifically what attributes are present on a file.</p>
+<pre><code>$ xattr /path/to/file
+
+com.apple.quarantine
+</code></pre>
+<h3>Methodology</h3>
+<p>TODO</p>
+<h2>Helpful Tools</h2>
+<p>A progmatic way to verify if applications signature will pass gate keeper is to run 'spctl'</p>
+<pre><code>spctl --assess --type install
+</code></pre>
+<p>To check the actual signature use 'pkgutil'</p>
+<pre><code>pkgutil --check-signature ./Foundry.pkg/
+</code></pre>
+<p>''Draft version, need to extend helpful tool section outline actual methodology''</p>
+        <time>29th April 2015</time>
+      </article>
+    <nav>
+      <ul>
+        <li>Previous Article: <a href="../Article/PythonDescriptorNotes.html">Python Descriptor Notes</a></li>
+      <ul>
+    </nav>
+  </div>
+  </body>
+</html>
