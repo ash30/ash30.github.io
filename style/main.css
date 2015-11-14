@@ -46,6 +46,9 @@ article, pre, p, nav, .container {
 .row li, .row div {
   display: inline-block; }
 
+.bukan {
+  visibility: hidden; }
+
 body {
   font-family: sans-serif;
   font-size: 16px;
@@ -60,16 +63,16 @@ h2 {
   line-height: 41.88678px; }
 
 pre {
-  line-height: 16px;
-  font-family: monospace; }
+  font-family: monospace;
+  line-height: 16px; }
 
 .ruler {
   border-top: solid 3px black; }
 
 #portrait {
+  border-radius: 25.888px;
   height: 41.88678px;
-  width: 41.88678px;
-  border-radius: 25.888px; }
+  width: 41.88678px; }
 
 .external {
   color: #969696; }
