@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html class="no-js">
+  <head>
+    <link rel="stylesheet" href="../style/main.css">
+  </head>
+
+  <body>
+  <div class="container">
+    <div id='header'>
+      <ol class="row">
+        <li><a class="site" href="/index.html">Blog</a></li>
+        <li><a class="site" href="/index.html">RSS</a></li>
+      </ol> 
+    </div>
+
+    <div class="ruler container"></div>
+    <div class="container">
+      <article>
+        <h1>Python Bindings for TargetProcess</h1>
+        <p>Just a note on a new project I've open sourced on Github before I go off to enjoy 
+the bank holiday weekend.</p>
+<p><a href='https://github.com/ash30/tpapi'>tpapi</a> is an unoffical python library for TargetProcess that exposes entity data via a standard object orientated interface and supports nested entity lookup for collections and resource attributes. 
+The original motivation for tpapi was to easily explore data via the REPL
+but it also comes in handy for automating those repetitive tasks.</p>
+<p>As an example of what you can do, I've shared a gist for parsing a testrun. After completing
+a one you'll usually have some fails that reference existing bugs and it's useful
+to quickly report on any new issues. In this example I get the data for a specified testrun
+and iterate over the bugs linked against failed testcases, reporting on 'new issues'
+based on the homogeneity of the bug's TestCaseRuns attribute.</p>
+<script src="https://gist.github.com/ash30/cfebdf200df7e96242755c80c06ade91.js"></script>
+
+<p>Hopefully you can see tpapi allows you to navigate the links between entities quite 
+intuitively and supports entity comparison and membership tests for entitiy collections.
+Its still early days and there are plenty of things still waiting to be implemented,
+but if anyone else wants to automate some TP dealings, feel free to give it ago.</p>
+<h2>References</h2>
+<p><a href='https://github.com/ash30/tpapi'>https://github.com/ash30/tpapi</a> </p>
+        <time>28th May 2016</time>
+      </article>
+    <nav>
+      <ul>
+        <li>Previous Article: <a href="../Article/TestingMacGatekeeper.html">Testing Mac Gatekeeper</a></li>
+      <ul>
+    </nav>
+  </div>
+  </body>
+</html>
