@@ -18,32 +18,13 @@
       <article>
         <h1>Python Descriptor Notes</h1>
         <h2>Example</h2>
-<pre><code>class TestDataDescriptor(object):
-
-    def __get__(self,obj,type):
-        print 'in __get__'
-        return obj.val
-
-    def __set__(self,obj,val):
-        print 'in __set__'
-        obj.val = val
-
-class Foo(object):
-    a = TestDataDescriptor()
-
-    def __init__(self):
-        self.a = 1
-
-if __name__=='__main__':
-
-    x = Foo()
-
-    print "reassigning a"
-    x.a = 2
-</code></pre>
-<h2>Gotchas</h2>
-<p>Descriptor methods only work for class variables, you can use the object parameter to store data on the instance itself.</p>
-<p>The descriptor protocol methods are invoked via an objects __getattribute__ so be careful when overriding </p>
+<p><script src="https://gist.github.com/ash30/cca24018f5153cf51b8c674d3fb94f5f.js"></script></p>
+<h2>Notes</h2>
+<p>Descriptors are any object that conform to the descriptor protocol __get__,__set__ and __del__. Properties are a common example.</p>
+<p>Descriptors are class level objects and you must use the obj reference passed to it in order to access the parent object.</p>
+<p>This is because the descriptor protocol methods are invoked via an objects __getattribute__ - so be careful when overriding!</p>
+<p>Weirdly hasattr returns false for testing if an class objects holds a specific 
+property.</p>
 <h2>References</h2>
 <p><a href="www.docs.python.org/2/howto/descriptor.html">www.docs.python.org/2/howto/descriptor.html</a></p>
         <time>11th March 2014</time>
