@@ -33,7 +33,8 @@
 <meta property="og:url" content=""/>
 <meta property="og:image" content="/images/portrait.jpg">
 
-  <title>Tech Notes</title>
+  <title>Tech Notes &ndash;     Tag OSX
+</title>
 
 </head>
 <body>
@@ -71,55 +72,6 @@
 
 <article>
   <header>
-    <h2><a href="/note-to-unowned-self.html#note-to-unowned-self">Note to Unowned Self</a></h2>
-    <p>
-          Posted on Sun 20 November 2016 in <a href="/category/tech.html">Tech</a>
-
-
-          &#8226;     Tagged with
-
-              <a href="/tag/swift.html">Swift</a>,              <a href="/tag/ios.html">iOS</a>
-    </p>
-  </header>
-  <div>
-      <p>Its easy to think that the answer to all closure woes is to just declare self unowned - no more reference cycles for me!
-However this is a very easy way to crash! Been there, done that, never again. </p>
-<p>let me translate what 'unowned' means: </p>
-<blockquote>
-<p>I am not the owner of this reference but I am <strong>100%</strong> sure it will exist when I need it.</p>
-</blockquote>
-<p>Said like that, you can see thats a pretty sizeable assumption! </p>
-<p>A Weak reference, most of the time, will be a better bet because it makes you deal with possiblity of nil. </p>
-  </div>
-  <hr />
-</article>
-<article>
-  <header>
-    <h2><a href="/python-bindings-for-targetprocess.html#python-bindings-for-targetprocess">Python Bindings for TargetProcess</a></h2>
-    <p>
-          Posted on Sat 28 May 2016 in <a href="/category/tech.html">Tech</a>
-
-
-          &#8226;     Tagged with
-
-              <a href="/tag/python.html">Python</a>,              <a href="/tag/restapis.html">RestAPIs</a>
-    </p>
-  </header>
-  <div>
-      <p>Where can you find them? In one of my side projects: <a href='https://github.com/ash30/tpapi'>tpapi</a> - an unoffical python client for TargetProcess. It takes care of interacting with the REST api and returns nice model objects
-for you to interact with. Some useful features worth mentioning:</p>
-<h3>Transparent Pagination of Resource Requests</h3>
-<p>Every collection of entities is actually a generator which will lazily send http requests
-as needed. This way we can expose a standard iterator interface over paginated resources.</p>
-<h3>Nested Model Lookup</h3>
-<p>For resource or collection attributes we return an iterator over the correct class automatically
-so you can continue to chain queries or pluck values.</p>
-<p>Theres also a gist showcasing usage: <a href="https://gist.github.com/ash30/cfebdf200df7e96242755c80c06ade91">here</a></p>
-  </div>
-  <hr />
-</article>
-<article>
-  <header>
     <h2><a href="/testing-mac-gatekeeper.html#testing-mac-gatekeeper">Testing Mac Gatekeeper</a></h2>
     <p>
           Posted on Wed 29 April 2015 in <a href="/category/tech.html">Tech</a>
@@ -155,33 +107,9 @@ com.apple.quarantine
 <p>Additionally you can check the actual signature use 'pkgutil' for futher details.</p>
 <div class="highlight"><pre><span></span>pkgutil --check-signature ./path/to/file
 </pre></div>
-  </div>
-  <hr />
-</article>
-<article>
-  <header>
-    <h2><a href="/python-descriptor-notes.html#python-descriptor-notes">Python Descriptor Notes</a></h2>
-    <p>
-          Posted on Tue 11 March 2014 in <a href="/category/tech.html">Tech</a>
-
-
-          &#8226;     Tagged with
-
-              <a href="/tag/python.html">Python</a>
-    </p>
-  </header>
-  <div>
-      <ul>
-<li>Descriptors are any object that conform to the descriptor protocol __get__,__set__ and __del__. Properties are a common example</li>
-<li>Descriptors are class level objects and you must use the obj reference passed to it in order to access the parent object.</li>
-<li>This is because the descriptor protocol methods are invoked via an objects __getattribute__ - so be careful when overriding!</li>
-<li>Weirdly hasattr returns false for testing if an class objects holds a specific 
-property.</li>
-</ul>
-<h2>Example</h2>
-<p><script src="https://gist.github.com/ash30/cca24018f5153cf51b8c674d3fb94f5f.js"></script></p>
-<h2>References</h2>
-<p><a href="www.docs.python.org/2/howto/descriptor.html">www.docs.python.org/2/howto/descriptor.html</a></p>
+      <br>
+      <a class="btn" href="/testing-mac-gatekeeper.html#testing-mac-gatekeeper">    Continue reading
+</a>
   </div>
 </article>
 
