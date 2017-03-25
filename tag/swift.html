@@ -1,222 +1,100 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link href='//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,400italic' rel='stylesheet' type='text/css'>
-
-    <link rel="stylesheet" type="text/css" href="/theme/stylesheet/style.min.css">
-
-  <link rel="stylesheet" type="text/css" href="/theme/pygments/xcode.min.css">
-  <link rel="stylesheet" type="text/css" href="/theme/font-awesome/css/font-awesome.min.css">
-
-    <link href="/static/custom.css" rel="stylesheet">
-
-
-
-    <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
-    <link rel="icon" href="/images/favicon.ico" type="image/x-icon">
-
-  <meta charset="utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="HandheldFriendly" content="True" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="robots" content="index, follow" />
-
-
-    <meta name="author" content="Ashley Arthur" />
-    <meta name="description" content="Ashley Arthur's Thoughts and Writings" />
-<meta property="og:site_name" content="Tech Notes"/>
-<meta property="og:type" content="blog"/>
-<meta property="og:title" content="Tech Notes"/>
-<meta property="og:description" content="Ashley Arthur's Thoughts and Writings"/>
-<meta property="og:locale" content="en_US"/>
-<meta property="og:url" content=""/>
-<meta property="og:image" content="/images/portrait.jpg">
-
-  <title>Tech Notes &ndash;     Tag Swift
-</title>
-
+	<meta charset="utf-8">
+	<title>Swift — Ashley Arthur</title>
+	<meta name="description" content="All posts which refer to tag Swift">
+	<meta name="author" content="Ashley Arthur">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+	<!--[if lt IE 9]>
+		<script src="../theme/html5.js"></script>
+		<![endif]-->
+	<link href="../theme/css/ipython.css" rel="stylesheet">
+	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+	<link href="//maxcdn.bootstrapcdn.com/bootswatch/3.2.0/simplex/bootstrap.min.css" rel="stylesheet">
+	<link href="../theme/css/local.css" rel="stylesheet">
+	<link href="../theme/css/pygments.css" rel="stylesheet">
 </head>
 <body>
-  <aside>
-    <div>
-      <a href="">
-        <img src="/images/portrait.jpg" alt="Ashley Arthur" title="Ashley Arthur">
-      </a>
-      <h1><a href="">Ashley Arthur</a></h1>
-
-<p>Tech notes and Discoveries</p>
-
-      <ul class="social">
-        <li><a class="sc-linkedin" href="https://uk.linkedin.com/in/ashley-arthur-4a918635" target="_blank"><i class="fa fa-linkedin"></i></a></li>
-        <li><a class="sc-github" href="https://github.com/ash30" target="_blank"><i class="fa fa-github"></i></a></li>
-        <li><a class="sc-flickr" href="https://www.flickr.com/photos/ash30/" target="_blank"><i class="fa fa-flickr"></i></a></li>
-      </ul>
-    </div>
-
-
-  </aside>
-  <main>
-
-    <nav>
-      <a href="">    Home
-</a>
-
-      <a href="/archives.html">Archives</a>
-      <a href="/tags.html">Tags</a>
-
-
-    </nav>
-
-
-
-<article>
-  <header>
-    <h2><a href="/restoring-viewcontrollers-and-their-data-sources-wip.html#restoring-viewcontrollers-and-their-data-sources-wip">Restoring ViewControllers and their Data sources (WIP)</a></h2>
-    <p>
-          Posted on Fri 25 November 2016 in <a href="/category/tech.html">Tech</a>
-
-
-          &#8226;     Tagged with
-
-              <a href="/tag/swift.html">Swift</a>,              <a href="/tag/ios.html">iOS</a>
-    </p>
-  </header>
-  <div>
-      <p>The traditional flow for restoring view controllers in UIKit goes likes this:</p>
-<ol>
-<li>(Required) Assign restoration identifiers to the view controllers</li>
-<li>(Required) Tell iOS how to create or locate new view controller objects at launch time.</li>
-<li>(Optional) Encode current State for later restoration</li>
-</ol>
-<p>Recreating the hierarchy of view controllers is indeed easy and mostly automated 
-but a lot of the articles out there gloss over how to restore their dependencies
-(hint: Grabbing references to singletons in the VC’s decodeRestorableState method is not the correct answer!)</p>
-<p>Normally you pass dependencies like a baton between controllers. When restoring a controller,
-the segue isn’t called and you get an ‘empty’ controller and its up to you to restore the dependencies.
-It turns out the data source can adopt the same state restoring protocol as the view controller and come along for the ride.  </p>
-<h2>Assign restoration ids for dependencies</h2>
-<p>Normally as apart of the app launch you’ll have some code to initialise 
-backing data sources for your view controllers. As a small extension to this routine,
-we also now have to give them an ID so that the VC’s can indirectly reference them on app restore.</p>
-<p>The app delegate method <strong>willFinishLaunchingWithOptions</strong> is called after bootstrapping 
-but before the restoration process so is a good place to register objects. </p>
-<div class="highlight"><pre><span></span><span class="kd">func</span> <span class="nf">application</span><span class="p">(</span><span class="kc">_</span> <span class="n">application</span><span class="p">:</span> <span class="bp">UIApplication</span><span class="p">,</span> <span class="n">willFinishLaunchingWithOptions</span> <span class="n">launchOptions</span><span class="p">:</span> <span class="p">[</span><span class="n">UIApplicationLaunchOptionsKey</span> <span class="p">:</span> <span class="nb">Any</span><span class="p">]?</span> <span class="p">=</span> <span class="kc">nil</span><span class="p">)</span> <span class="p">-&gt;</span> <span class="nb">Bool</span> <span class="p">{</span>
-
-    <span class="c1">// Register Data Source</span>
-
-    <span class="bp">UIApplication</span><span class="p">.</span><span class="n">registerObject</span><span class="p">(</span>
-      <span class="n">forStateRestoration</span><span class="p">:</span> <span class="n">dataStore</span><span class="p">,</span>
-      <span class="n">restorationIdentifier</span><span class="p">:</span> <span class="s">&quot;DataSource&quot;</span>
-    <span class="p">)</span>
-    <span class="k">return</span> <span class="kc">true</span>
-<span class="p">}</span>
-</pre></div>
-
-
-<h2>Tell iOS how to create or locate the dependency</h2>
-<p>Any registered dependency must conform to ‘UIStateRestoring’ protocol 
-(UIViewControllers automatically conform to this) and allows you to define a restoration class</p>
-<div class="highlight"><pre><span></span><span class="kr">optional</span> <span class="kd">var</span> <span class="nv">objectRestorationClass</span><span class="p">:</span> <span class="bp">UIObjectRestoration</span><span class="p">.</span><span class="kr">Type</span><span class="p">?</span> <span class="p">{</span> <span class="kr">get</span> <span class="p">}</span>
-</pre></div>
-
-
-<p>If you return nil from this method, UIKIT assumes the app startup code recreated 
-the dependency already and will be able to find it as you’ve registered it to a restoration id.</p>
-<p>If you do specify a restoration class, it needs to define the following static method:</p>
-<div class="highlight"><pre><span></span><span class="kd">static</span> <span class="kd">func</span> <span class="nf">object</span><span class="p">(</span><span class="n">withRestorationIdentifierPath</span> <span class="n">identifierComponents</span><span class="p">:</span> <span class="p">[</span><span class="nb">String</span><span class="p">],</span> <span class="n">coder</span><span class="p">:</span> <span class="bp">NSCoder</span><span class="p">)</span> <span class="p">-&gt;</span> <span class="bp">UIStateRestoring</span><span class="p">?</span>
-</pre></div>
-
-
-<p>It can return a reference to a global, init a new instance or return nil if no restoration is possible. </p>
-<h2>Restoring the Dependency as part of the Controller Decode Process</h2>
-<p>Now when you restore the view controllers state, any request to decode the 
-datasources’s restoration id will simply be passed the registered instance.
-Voila! You can now reconstruct the VC’s dependencies.</p>
-<div class="highlight"><pre><span></span><span class="kd">class</span> <span class="nc">controller</span> <span class="p">:</span> <span class="bp">UIViewController</span> <span class="p">{</span>
-    <span class="c1">// ...</span>
-
-    <span class="kr">override</span> <span class="kd">func</span> <span class="nf">decodeRestorableState</span><span class="p">(</span><span class="n">with</span><span class="p">:</span> <span class="bp">NSCoder</span><span class="p">)</span> <span class="p">{</span>
-        <span class="kc">super</span><span class="p">.</span><span class="n">decodeRestorableState</span><span class="p">(</span><span class="n">with</span><span class="p">:</span> <span class="n">with</span><span class="p">)</span>
-        <span class="n">guard</span>
-            <span class="kd">let</span> <span class="nv">object</span> <span class="p">=</span> <span class="n">with</span><span class="p">.</span><span class="n">decodeObject</span><span class="p">(</span><span class="n">forKey</span><span class="p">:</span> <span class="s">&quot;DataSource&quot;</span><span class="p">),</span> <span class="c1">// Any </span>
-            <span class="kd">let</span> <span class="nv">dataSource</span> <span class="p">=</span> <span class="n">object</span> <span class="kc">as</span><span class="p">?</span> <span class="n">DateSourceKlass</span> 
-        <span class="k">else</span> <span class="p">{</span>
-            <span class="k">return</span>
-        <span class="p">}</span>
-        <span class="kc">self</span><span class="p">.</span><span class="n">dataSource</span> <span class="p">=</span> <span class="n">dataSource</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</pre></div>
-
-
-<p>The one draw back to this approach, as others have noted, is how it separates 
-Controller Restoration and Dependency Restoration into 2 distinct phases. 
-You’ve just lost your paddle if you’ve declared your dependencies as const.
-I think this hints at UIKits own opinion that controllers don’t actually own 
-their datasources and so should be declared weakly.</p>
-<h2>References</h2>
-<ul>
-<li><a href="https://developer.apple.com/videos/play/wwdc2013/222/">https://developer.apple.com/videos/play/wwdc2013/222/</a></li>
-</ul>
-      <br>
-      <a class="btn" href="/restoring-viewcontrollers-and-their-data-sources-wip.html#restoring-viewcontrollers-and-their-data-sources-wip">    Continue reading
-</a>
-  </div>
-  <hr />
-</article>
-<article>
-  <header>
-    <h2><a href="/note-to-unowned-self.html#note-to-unowned-self">Note to Unowned Self</a></h2>
-    <p>
-          Posted on Sun 20 November 2016 in <a href="/category/tech.html">Tech</a>
-
-
-          &#8226;     Tagged with
-
-              <a href="/tag/swift.html">Swift</a>,              <a href="/tag/ios.html">iOS</a>
-    </p>
-  </header>
-  <div>
-      <p>Its easy to think that the answer to all closure woes is to just declare self unowned - no more reference cycles for me!
-However this is a very easy way to crash! Been there, done that, never again. </p>
-<p>let me translate what 'unowned' means: </p>
-<blockquote>
-<p>I am not the owner of this reference but I am <strong>100%</strong> sure it will exist when I need it.</p>
-</blockquote>
-<p>Said like that, you can see thats a pretty sizeable assumption! </p>
-<p>A Weak reference, most of the time, will be a better bet because it makes you deal with possiblity of nil. </p>
-      <br>
-      <a class="btn" href="/note-to-unowned-self.html#note-to-unowned-self">    Continue reading
-</a>
-  </div>
-</article>
-
-  <div class="pagination">
-  </div>
-
-
-
-
-    <footer>
-<p>&copy; Ashley Arthur 2016</p>
-<p>    Powered by <a href="http://getpelican.com" target="_blank">Pelican</a> - <a href="https://github.com/alexandrevicenzi/flex" target="_blank">Flex</a> theme by <a href="http://alexandrevicenzi.com" target="_blank">Alexandre Vicenzi</a>
-</p>    </footer>
-  </main>
-
-
-
-
-
-<script type="application/ld+json">
-{
-  "@context" : "http://schema.org",
-  "@type" : "Blog",
-  "name": " Tech Notes ",
-  "url" : "",
-  "image": "/images/portrait.jpg",
-  "description": "Ashley Arthur's Thoughts and Writings"
-}
+<div class="container">
+	<div class="page-header">
+		<h1><a href="../">Ashley Arthur</a>
+			<br>	</div>
+	<div class="row">
+		<div class="col-md-8 col-md-offset-2">
+<h1>Tag <small>Swift</small></h1>
+<table class="table">
+    <tbody>
+        <tr>
+        <td>25 Nov 2016</td>
+        <td><a href='../restoring-viewcontrollers-and-their-data-sources-wip.html'>Restoring ViewControllers and their Data sources (WIP)</a></td>
+        </tr>
+        <tr>
+        <td>20 Nov 2016</td>
+        <td><a href='../note-to-unowned-self.html'>Note to Unowned Self</a></td>
+        </tr>
+    </tbody>
+</table>
+		</div>
+	</div> 	<!-- <hr> -->
+</div> <!-- /container -->
+<footer class="aw-footer bg-danger">
+	<div class="container"> <!-- footer -->
+		<div class="row">
+			<div class="col-md-10 col-md-offset-1">
+				<div class="row">
+					<div class="col-md-3">
+						<h4>Navigation</h4>
+						<ul class="list-unstyled my-list-style">
+							<li><a href=".."> Home</a></li>
+							<li><a href="../archives.html"><i class="fa fa-Archives "></i> Archives</a></li>
+							<li><a href="../tags.html"><i class="fa fa-Tags "></i> Tags</a></li>
+						</ul>
+					</div>
+					<div class="col-md-3">
+						<h4>Author</h4>
+						<ul class="list-unstyled my-list-style">
+							<li><a href="https://uk.linkedin.com/in/ashley-arthur-4a918635">linkedin</a></li>
+							<li><a href="https://github.com/ash30">github</a></li>
+							<li><a href="https://www.flickr.com/photos/ash30">flickr</a></li>
+						</ul>
+					</div>
+					<div class="col-md-3">
+						<h4>Categories</h4>
+						<ul class="list-unstyled my-list-style">
+							<li><a href="../category/tech.html">Tech (6)</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</footer>
+<div class="container">
+	<div class="row">
+		<div class="col-md-12 text-center center-block aw-bottom">
+			<p>&copy; Ashley Arthur 2016</p>
+			<p>Powered by Pelican</p>
+		</div>
+	</div>
+</div>
+<!-- JavaScript -->
+<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+jQuery(document).ready(function($) {
+	$("div.collapseheader").click(function () {
+		$header = $(this).children("span").first();
+		$codearea = $(this).children(".input_area");
+		$codearea.slideToggle(500, function () {
+			$header.text(function () {
+				return $codearea.is(":visible") ? "Collapse Code" : "Expand Code";
+			});
+		});
+	});
+});
 </script>
 </body>
 </html>

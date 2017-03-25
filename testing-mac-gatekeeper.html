@@ -1,92 +1,51 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link href='//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,400italic' rel='stylesheet' type='text/css'>
-
-    <link rel="stylesheet" type="text/css" href="/theme/stylesheet/style.min.css">
-
-  <link rel="stylesheet" type="text/css" href="/theme/pygments/xcode.min.css">
-  <link rel="stylesheet" type="text/css" href="/theme/font-awesome/css/font-awesome.min.css">
-
-    <link href="/static/custom.css" rel="stylesheet">
-
-
-
-    <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
-    <link rel="icon" href="/images/favicon.ico" type="image/x-icon">
-
-  <meta charset="utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="HandheldFriendly" content="True" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="robots" content="index, follow" />
-
-
-<meta name="author" content="Ashley Arthur" />
-<meta name="description" content="Gatekeeper on macOS guards against the execution and installation of applications from unknown sources. In order to pass this security check an application needs to be correctly signed which means its a good requirement to check before a release. The key gotcha to watch out for when testing is to ensure the executable has been quarantined. By that I mean it has the ''com.apple.quarantine'' extended attribute present as Gatekeeper is triggered specifically at the first time you execute or install a quarantined file. To verify the existence of the quarantine flag, you can show 'ls' output in terminal and look for the '@' at the end of the permission fields. Better yet you can use the 'xattr' command to show any extended attributes that exist on a file. $ xattr /path/to/file com.apple.quarantine A programatic method to verify if the application's signature will pass gate keeper is to run the 'spctl' command. spctl --assess --type install ./path/to/file Spctl will exit zero on success or return one if anything failed. Additionally you can check the actual signature use 'pkgutil' for futher details. pkgutil --check-signature ./path/to/file" />
-<meta name="keywords" content="Testing, OSX">
-<meta property="og:site_name" content="Tech Notes"/>
-<meta property="og:title" content="Testing Mac Gatekeeper"/>
-<meta property="og:description" content="Gatekeeper on macOS guards against the execution and installation of applications from unknown sources. In order to pass this security check an application needs to be correctly signed which means its a good requirement to check before a release. The key gotcha to watch out for when testing is to ensure the executable has been quarantined. By that I mean it has the ''com.apple.quarantine'' extended attribute present as Gatekeeper is triggered specifically at the first time you execute or install a quarantined file. To verify the existence of the quarantine flag, you can show 'ls' output in terminal and look for the '@' at the end of the permission fields. Better yet you can use the 'xattr' command to show any extended attributes that exist on a file. $ xattr /path/to/file com.apple.quarantine A programatic method to verify if the application's signature will pass gate keeper is to run the 'spctl' command. spctl --assess --type install ./path/to/file Spctl will exit zero on success or return one if anything failed. Additionally you can check the actual signature use 'pkgutil' for futher details. pkgutil --check-signature ./path/to/file"/>
-<meta property="og:locale" content="en_US"/>
-<meta property="og:url" content="/testing-mac-gatekeeper.html"/>
-<meta property="og:type" content="article"/>
-<meta property="article:published_time" content="2015-04-29 00:00:00+02:00"/>
-<meta property="article:modified_time" content=""/>
-<meta property="article:author" content="/author/ashley-arthur.html">
-<meta property="article:section" content="Tech"/>
-<meta property="article:tag" content="Testing"/>
-<meta property="article:tag" content="OSX"/>
-<meta property="og:image" content="/images/portrait.jpg">
-
-  <title>Tech Notes &ndash; Testing Mac Gatekeeper</title>
-
+	<meta charset="utf-8">
+	<title>Testing Mac Gatekeeper — Ashley Arthur</title>
+	<meta name="description" content="Title: Testing Mac Gatekeeper; Date: 2015-04-29; Author: Ashley Arthur">
+	<meta name="author" content="Ashley Arthur">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+	<!--[if lt IE 9]>
+		<script src="./theme/html5.js"></script>
+		<![endif]-->
+	<link href="./theme/css/ipython.css" rel="stylesheet">
+	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+	<link href="//maxcdn.bootstrapcdn.com/bootswatch/3.2.0/simplex/bootstrap.min.css" rel="stylesheet">
+	<link href="./theme/css/local.css" rel="stylesheet">
+	<link href="./theme/css/pygments.css" rel="stylesheet">
 </head>
 <body>
-  <aside>
-    <div>
-      <a href="">
-        <img src="/images/portrait.jpg" alt="Ashley Arthur" title="Ashley Arthur">
-      </a>
-      <h1><a href="">Ashley Arthur</a></h1>
-
-<p>Tech notes and Discoveries</p>
-
-      <ul class="social">
-        <li><a class="sc-linkedin" href="https://uk.linkedin.com/in/ashley-arthur-4a918635" target="_blank"><i class="fa fa-linkedin"></i></a></li>
-        <li><a class="sc-github" href="https://github.com/ash30" target="_blank"><i class="fa fa-github"></i></a></li>
-        <li><a class="sc-flickr" href="https://www.flickr.com/photos/ash30/" target="_blank"><i class="fa fa-flickr"></i></a></li>
-      </ul>
-    </div>
-
-
-  </aside>
-  <main>
-
-    <nav>
-      <a href="">    Home
-</a>
-
-      <a href="/archives.html">Archives</a>
-      <a href="/tags.html">Tags</a>
-
-
-    </nav>
-
-<article class="single">
-  <header>
-    <h1 id="testing-mac-gatekeeper">Testing Mac Gatekeeper</h1>
-    <p>
-          Posted on Wed 29 April 2015 in <a href="/category/tech.html">Tech</a>
-
-
-    </p>
-  </header>
-
-
-  <div>
-    <p>Gatekeeper on macOS guards against the execution and installation of applications from unknown sources.
+<div class="container">
+	<div class="page-header">
+		<h1><a href="./">Ashley Arthur</a>
+			<br>	</div>
+	<div class="row">
+		<div class="col-md-8 col-md-offset-2">
+<div class="article" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="text-center article-header">
+		<h1 itemprop="name headline" class="article-title">Testing Mac Gatekeeper</h1>
+		<time datetime="2015-04-29T00:00:00+02:00" itemprop="datePublished">Wed 29 April 2015</time>
+	</div>
+	<div>
+		Category:
+		<span itemprop="articleSection">
+			<a href="./category/tech.html" rel="category">Tech</a>
+		</span>
+	</div>
+ 
+	<div>
+		Tags:
+		<span itemprop="keywords">
+			<a href="./tag/testing.html" rel="tag">Testing</a>
+		</span>
+		<span itemprop="keywords">
+			<a href="./tag/osx.html" rel="tag">OSX</a>
+		</span>
+	</div>
+	<div itemprop="articleBody" class="article-body"><p>Gatekeeper on macOS guards against the execution and installation of applications from unknown sources.
 In order to pass this security check an application needs to be correctly signed which means its
 a good requirement to check before a release.</p>
 <p>The key gotcha to watch out for when testing is to ensure the executable has been quarantined.
@@ -109,39 +68,67 @@ com.apple.quarantine
 <p>Spctl will exit zero on success or return one if anything failed.</p>
 <p>Additionally you can check the actual signature use 'pkgutil' for futher details.</p>
 <div class="highlight"><pre><span></span>pkgutil --check-signature ./path/to/file
-</pre></div>
-  </div>
-  <div class="tag-cloud">
-    <p>
-      <a href="/tag/testing.html">Testing</a>
-      <a href="/tag/osx.html">OSX</a>
-    </p>
-  </div>
-
-
-
-
-</article>
-
-    <footer>
-<p>&copy; Ashley Arthur 2016</p>
-<p>    Powered by <a href="http://getpelican.com" target="_blank">Pelican</a> - <a href="https://github.com/alexandrevicenzi/flex" target="_blank">Flex</a> theme by <a href="http://alexandrevicenzi.com" target="_blank">Alexandre Vicenzi</a>
-</p>    </footer>
-  </main>
-
-
-
-
-
-<script type="application/ld+json">
-{
-  "@context" : "http://schema.org",
-  "@type" : "Blog",
-  "name": " Tech Notes ",
-  "url" : "",
-  "image": "/images/portrait.jpg",
-  "description": "Ashley Arthur's Thoughts and Writings"
-}
+</pre></div></div>
+	<hr>
+</div>
+		</div>
+	</div> 	<!-- <hr> -->
+</div> <!-- /container -->
+<footer class="aw-footer bg-danger">
+	<div class="container"> <!-- footer -->
+		<div class="row">
+			<div class="col-md-10 col-md-offset-1">
+				<div class="row">
+					<div class="col-md-3">
+						<h4>Navigation</h4>
+						<ul class="list-unstyled my-list-style">
+							<li><a href="."> Home</a></li>
+							<li><a href="./archives.html"><i class="fa fa-Archives "></i> Archives</a></li>
+							<li><a href="./tags.html"><i class="fa fa-Tags "></i> Tags</a></li>
+						</ul>
+					</div>
+					<div class="col-md-3">
+						<h4>Author</h4>
+						<ul class="list-unstyled my-list-style">
+							<li><a href="https://uk.linkedin.com/in/ashley-arthur-4a918635">linkedin</a></li>
+							<li><a href="https://github.com/ash30">github</a></li>
+							<li><a href="https://www.flickr.com/photos/ash30">flickr</a></li>
+						</ul>
+					</div>
+					<div class="col-md-3">
+						<h4>Categories</h4>
+						<ul class="list-unstyled my-list-style">
+							<li><a href="./category/tech.html">Tech (6)</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</footer>
+<div class="container">
+	<div class="row">
+		<div class="col-md-12 text-center center-block aw-bottom">
+			<p>&copy; Ashley Arthur 2016</p>
+			<p>Powered by Pelican</p>
+		</div>
+	</div>
+</div>
+<!-- JavaScript -->
+<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+jQuery(document).ready(function($) {
+	$("div.collapseheader").click(function () {
+		$header = $(this).children("span").first();
+		$codearea = $(this).children(".input_area");
+		$codearea.slideToggle(500, function () {
+			$header.text(function () {
+				return $codearea.is(":visible") ? "Collapse Code" : "Expand Code";
+			});
+		});
+	});
+});
 </script>
 </body>
 </html>

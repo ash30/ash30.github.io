@@ -1,158 +1,104 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link href='//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,400italic' rel='stylesheet' type='text/css'>
-
-    <link rel="stylesheet" type="text/css" href="/theme/stylesheet/style.min.css">
-
-  <link rel="stylesheet" type="text/css" href="/theme/pygments/xcode.min.css">
-  <link rel="stylesheet" type="text/css" href="/theme/font-awesome/css/font-awesome.min.css">
-
-    <link href="/static/custom.css" rel="stylesheet">
-
-
-
-    <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
-    <link rel="icon" href="/images/favicon.ico" type="image/x-icon">
-
-  <meta charset="utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="HandheldFriendly" content="True" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="robots" content="index, follow" />
-
-
-    <meta name="author" content="Ashley Arthur" />
-    <meta name="description" content="Ashley Arthur's Thoughts and Writings" />
-<meta property="og:site_name" content="Tech Notes"/>
-<meta property="og:type" content="blog"/>
-<meta property="og:title" content="Tech Notes"/>
-<meta property="og:description" content="Ashley Arthur's Thoughts and Writings"/>
-<meta property="og:locale" content="en_US"/>
-<meta property="og:url" content=""/>
-<meta property="og:image" content="/images/portrait.jpg">
-
-  <title>Tech Notes &ndash;     Tag Python
-</title>
-
+	<meta charset="utf-8">
+	<title>Python — Ashley Arthur</title>
+	<meta name="description" content="All posts which refer to tag Python">
+	<meta name="author" content="Ashley Arthur">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+	<!--[if lt IE 9]>
+		<script src="../theme/html5.js"></script>
+		<![endif]-->
+	<link href="../theme/css/ipython.css" rel="stylesheet">
+	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+	<link href="//maxcdn.bootstrapcdn.com/bootswatch/3.2.0/simplex/bootstrap.min.css" rel="stylesheet">
+	<link href="../theme/css/local.css" rel="stylesheet">
+	<link href="../theme/css/pygments.css" rel="stylesheet">
 </head>
 <body>
-  <aside>
-    <div>
-      <a href="">
-        <img src="/images/portrait.jpg" alt="Ashley Arthur" title="Ashley Arthur">
-      </a>
-      <h1><a href="">Ashley Arthur</a></h1>
-
-<p>Tech notes and Discoveries</p>
-
-      <ul class="social">
-        <li><a class="sc-linkedin" href="https://uk.linkedin.com/in/ashley-arthur-4a918635" target="_blank"><i class="fa fa-linkedin"></i></a></li>
-        <li><a class="sc-github" href="https://github.com/ash30" target="_blank"><i class="fa fa-github"></i></a></li>
-        <li><a class="sc-flickr" href="https://www.flickr.com/photos/ash30/" target="_blank"><i class="fa fa-flickr"></i></a></li>
-      </ul>
-    </div>
-
-
-  </aside>
-  <main>
-
-    <nav>
-      <a href="">    Home
-</a>
-
-      <a href="/archives.html">Archives</a>
-      <a href="/tags.html">Tags</a>
-
-
-    </nav>
-
-
-
-<article>
-  <header>
-    <h2><a href="/python-bindings-for-targetprocess.html#python-bindings-for-targetprocess">Python Bindings for TargetProcess</a></h2>
-    <p>
-          Posted on Sat 28 May 2016 in <a href="/category/tech.html">Tech</a>
-
-
-          &#8226;     Tagged with
-
-              <a href="/tag/python.html">Python</a>,              <a href="/tag/restapis.html">RestAPIs</a>
-    </p>
-  </header>
-  <div>
-      <p>Where can you find them? In one of my side projects: <a href='https://github.com/ash30/tpapi'>tpapi</a> - an unoffical python client for TargetProcess. It takes care of interacting with the REST api and returns nice model objects
-for you to interact with. Some useful features worth mentioning:</p>
-<h3>Transparent Pagination of Resource Requests</h3>
-<p>Every collection of entities is actually a generator which will lazily send http requests
-as needed. This way we can expose a standard iterator interface over paginated resources.</p>
-<h3>Nested Model Lookup</h3>
-<p>For resource or collection attributes we return an iterator over the correct class automatically
-so you can continue to chain queries or pluck values.</p>
-<p>Theres also a gist showcasing usage: <a href="https://gist.github.com/ash30/cfebdf200df7e96242755c80c06ade91">here</a></p>
-      <br>
-      <a class="btn" href="/python-bindings-for-targetprocess.html#python-bindings-for-targetprocess">    Continue reading
-</a>
-  </div>
-  <hr />
-</article>
-<article>
-  <header>
-    <h2><a href="/python-descriptor-notes.html#python-descriptor-notes">Python Descriptor Notes</a></h2>
-    <p>
-          Posted on Tue 11 March 2014 in <a href="/category/tech.html">Tech</a>
-
-
-          &#8226;     Tagged with
-
-              <a href="/tag/python.html">Python</a>
-    </p>
-  </header>
-  <div>
-      <ul>
-<li>Descriptors are any object that conform to the descriptor protocol __get__,__set__ and __del__. Properties are a common example</li>
-<li>Descriptors are class level objects and you must use the obj reference passed to it in order to access the parent object.</li>
-<li>This is because the descriptor protocol methods are invoked via an objects __getattribute__ - so be careful when overriding!</li>
-<li>Weirdly hasattr returns false for testing if an class objects holds a specific 
-property.</li>
-</ul>
-<h2>Example</h2>
-<p><script src="https://gist.github.com/ash30/cca24018f5153cf51b8c674d3fb94f5f.js"></script></p>
-<h2>References</h2>
-<p><a href="www.docs.python.org/2/howto/descriptor.html">www.docs.python.org/2/howto/descriptor.html</a></p>
-      <br>
-      <a class="btn" href="/python-descriptor-notes.html#python-descriptor-notes">    Continue reading
-</a>
-  </div>
-</article>
-
-  <div class="pagination">
-  </div>
-
-
-
-
-    <footer>
-<p>&copy; Ashley Arthur 2016</p>
-<p>    Powered by <a href="http://getpelican.com" target="_blank">Pelican</a> - <a href="https://github.com/alexandrevicenzi/flex" target="_blank">Flex</a> theme by <a href="http://alexandrevicenzi.com" target="_blank">Alexandre Vicenzi</a>
-</p>    </footer>
-  </main>
-
-
-
-
-
-<script type="application/ld+json">
-{
-  "@context" : "http://schema.org",
-  "@type" : "Blog",
-  "name": " Tech Notes ",
-  "url" : "",
-  "image": "/images/portrait.jpg",
-  "description": "Ashley Arthur's Thoughts and Writings"
-}
+<div class="container">
+	<div class="page-header">
+		<h1><a href="../">Ashley Arthur</a>
+			<br>	</div>
+	<div class="row">
+		<div class="col-md-8 col-md-offset-2">
+<h1>Tag <small>Python</small></h1>
+<table class="table">
+    <tbody>
+        <tr>
+        <td>10 Mar 2017</td>
+        <td><a href='../use-unittests-to-explore-3rd-party-apis.html'>Use Unittests to Explore 3rd Party APIs</a></td>
+        </tr>
+        <tr>
+        <td>28 May 2016</td>
+        <td><a href='../python-bindings-for-targetprocess.html'>Python Bindings for TargetProcess</a></td>
+        </tr>
+        <tr>
+        <td>11 Mar 2014</td>
+        <td><a href='../python-descriptor-notes.html'>Python Descriptor Notes</a></td>
+        </tr>
+    </tbody>
+</table>
+		</div>
+	</div> 	<!-- <hr> -->
+</div> <!-- /container -->
+<footer class="aw-footer bg-danger">
+	<div class="container"> <!-- footer -->
+		<div class="row">
+			<div class="col-md-10 col-md-offset-1">
+				<div class="row">
+					<div class="col-md-3">
+						<h4>Navigation</h4>
+						<ul class="list-unstyled my-list-style">
+							<li><a href=".."> Home</a></li>
+							<li><a href="../archives.html"><i class="fa fa-Archives "></i> Archives</a></li>
+							<li><a href="../tags.html"><i class="fa fa-Tags "></i> Tags</a></li>
+						</ul>
+					</div>
+					<div class="col-md-3">
+						<h4>Author</h4>
+						<ul class="list-unstyled my-list-style">
+							<li><a href="https://uk.linkedin.com/in/ashley-arthur-4a918635">linkedin</a></li>
+							<li><a href="https://github.com/ash30">github</a></li>
+							<li><a href="https://www.flickr.com/photos/ash30">flickr</a></li>
+						</ul>
+					</div>
+					<div class="col-md-3">
+						<h4>Categories</h4>
+						<ul class="list-unstyled my-list-style">
+							<li><a href="../category/tech.html">Tech (6)</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</footer>
+<div class="container">
+	<div class="row">
+		<div class="col-md-12 text-center center-block aw-bottom">
+			<p>&copy; Ashley Arthur 2016</p>
+			<p>Powered by Pelican</p>
+		</div>
+	</div>
+</div>
+<!-- JavaScript -->
+<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+jQuery(document).ready(function($) {
+	$("div.collapseheader").click(function () {
+		$header = $(this).children("span").first();
+		$codearea = $(this).children(".input_area");
+		$codearea.slideToggle(500, function () {
+			$header.text(function () {
+				return $codearea.is(":visible") ? "Collapse Code" : "Expand Code";
+			});
+		});
+	});
+});
 </script>
 </body>
 </html>

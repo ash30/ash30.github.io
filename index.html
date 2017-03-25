@@ -1,307 +1,244 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link href='//fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,400italic' rel='stylesheet' type='text/css'>
-
-    <link rel="stylesheet" type="text/css" href="/theme/stylesheet/style.min.css">
-
-  <link rel="stylesheet" type="text/css" href="/theme/pygments/xcode.min.css">
-  <link rel="stylesheet" type="text/css" href="/theme/font-awesome/css/font-awesome.min.css">
-
-    <link href="/static/custom.css" rel="stylesheet">
-
-
-
-    <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
-    <link rel="icon" href="/images/favicon.ico" type="image/x-icon">
-
-  <meta charset="utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="HandheldFriendly" content="True" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="robots" content="index, follow" />
-
-
-    <meta name="author" content="Ashley Arthur" />
-    <meta name="description" content="Ashley Arthur's Thoughts and Writings" />
-<meta property="og:site_name" content="Tech Notes"/>
-<meta property="og:type" content="blog"/>
-<meta property="og:title" content="Tech Notes"/>
-<meta property="og:description" content="Ashley Arthur's Thoughts and Writings"/>
-<meta property="og:locale" content="en_US"/>
-<meta property="og:url" content=""/>
-<meta property="og:image" content="/images/portrait.jpg">
-
-  <title>Tech Notes</title>
-
+	<meta charset="utf-8">
+	<title>Ashley Arthur</title>
+	<meta name="description" content="Coding, scientific development, finance, data analysis, visualization, statistics, and machine learning">
+	<meta name="author" content="Ashley Arthur">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+	<!--[if lt IE 9]>
+		<script src="./theme/html5.js"></script>
+		<![endif]-->
+	<link href="./theme/css/ipython.css" rel="stylesheet">
+	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+	<link href="//maxcdn.bootstrapcdn.com/bootswatch/3.2.0/simplex/bootstrap.min.css" rel="stylesheet">
+	<link href="./theme/css/local.css" rel="stylesheet">
+	<link href="./theme/css/pygments.css" rel="stylesheet">
 </head>
 <body>
-  <aside>
-    <div>
-      <a href="">
-        <img src="/images/portrait.jpg" alt="Ashley Arthur" title="Ashley Arthur">
-      </a>
-      <h1><a href="">Ashley Arthur</a></h1>
-
-<p>Tech notes and Discoveries</p>
-
-      <ul class="social">
-        <li><a class="sc-linkedin" href="https://uk.linkedin.com/in/ashley-arthur-4a918635" target="_blank"><i class="fa fa-linkedin"></i></a></li>
-        <li><a class="sc-github" href="https://github.com/ash30" target="_blank"><i class="fa fa-github"></i></a></li>
-        <li><a class="sc-flickr" href="https://www.flickr.com/photos/ash30/" target="_blank"><i class="fa fa-flickr"></i></a></li>
-      </ul>
-    </div>
-
-
-  </aside>
-  <main>
-
-    <nav>
-      <a href="">    Home
-</a>
-
-      <a href="/archives.html">Archives</a>
-      <a href="/tags.html">Tags</a>
-
-
-    </nav>
-
-
-
-<article>
-  <header>
-    <h2><a href="/restoring-viewcontrollers-and-their-data-sources-wip.html#restoring-viewcontrollers-and-their-data-sources-wip">Restoring ViewControllers and their Data sources (WIP)</a></h2>
-    <p>
-          Posted on Fri 25 November 2016 in <a href="/category/tech.html">Tech</a>
-
-
-          &#8226;     Tagged with
-
-              <a href="/tag/swift.html">Swift</a>,              <a href="/tag/ios.html">iOS</a>
-    </p>
-  </header>
-  <div>
-      <p>The traditional flow for restoring view controllers in UIKit goes likes this:</p>
+<div class="container">
+	<div class="page-header">
+		<h1><a href="./">Ashley Arthur</a>
+			<br>	</div>
+	<div class="row">
+		<div class="col-md-8 col-md-offset-2">
+        
+        
+<div class="article" itemscope itemtype="http://schema.org/BlogPosting">
+	<a href="./use-unittests-to-explore-3rd-party-apis.html">
+		<h2 itemprop="name headline">Use Unittests to Explore 3rd Party APIs</h2>
+	</a>
+	<time datetime="2017-03-10T00:00:00+01:00" itemprop="datePublished">Fri 10 March 2017</time>
+	&nbsp;—&nbsp;
+	<div class="summary"><p>One of the ideas I've adopted recently is to use unittests to assert the contract between you and a 3rd party API.
+It's pretty normal to explore api usage in the REPL but by writing it formally as a series of tests you can record
+your findings and ...</p></div>
+	Category:
+	<span itemprop="articleSection">
+		<a href="./category/tech.html" rel="category">Tech</a>
+	</span>
+	Tags:
+ 
+	<span itemprop="keywords">
+		<a href="./tag/python.html" rel="tag">Python</a>
+	</span>
+</div>
+<hr>
+        
+<div class="article" itemscope itemtype="http://schema.org/BlogPosting">
+	<a href="./restoring-viewcontrollers-and-their-data-sources-wip.html">
+		<h2 itemprop="name headline">Restoring ViewControllers and their Data sources (WIP)</h2>
+	</a>
+	<time datetime="2016-11-25T00:00:00+01:00" itemprop="datePublished">Fri 25 November 2016</time>
+	&nbsp;—&nbsp;
+	<div class="summary"><p>The traditional flow for restoring view controllers in UIKit goes likes this:</p>
 <ol>
 <li>(Required) Assign restoration identifiers to the view controllers</li>
 <li>(Required) Tell iOS how to create or locate new view controller objects at launch time.</li>
 <li>(Optional) Encode current State for later restoration</li>
 </ol>
-<p>Recreating the hierarchy of view controllers is indeed easy and mostly automated 
-but a lot of the articles out there gloss over how to restore their dependencies
-(hint: Grabbing references to singletons in the VC’s decodeRestorableState method is not the correct answer!)</p>
-<p>Normally you pass dependencies like a baton between controllers. When restoring a controller,
-the segue isn’t called and you get an ‘empty’ controller and its up to you to restore the dependencies.
-It turns out the data source can adopt the same state restoring protocol as the view controller and come along for the ride.  </p>
-<h2>Assign restoration ids for dependencies</h2>
-<p>Normally as apart of the app launch you’ll have some code to initialise 
-backing data sources for your view controllers. As a small extension to this routine,
-we also now have to give them an ID so that the VC’s can indirectly reference them on app restore.</p>
-<p>The app delegate method <strong>willFinishLaunchingWithOptions</strong> is called after bootstrapping 
-but before the restoration process so is a good place to register objects. </p>
-<div class="highlight"><pre><span></span><span class="kd">func</span> <span class="nf">application</span><span class="p">(</span><span class="kc">_</span> <span class="n">application</span><span class="p">:</span> <span class="bp">UIApplication</span><span class="p">,</span> <span class="n">willFinishLaunchingWithOptions</span> <span class="n">launchOptions</span><span class="p">:</span> <span class="p">[</span><span class="n">UIApplicationLaunchOptionsKey</span> <span class="p">:</span> <span class="nb">Any</span><span class="p">]?</span> <span class="p">=</span> <span class="kc">nil</span><span class="p">)</span> <span class="p">-&gt;</span> <span class="nb">Bool</span> <span class="p">{</span>
-
-    <span class="c1">// Register Data Source</span>
-
-    <span class="bp">UIApplication</span><span class="p">.</span><span class="n">registerObject</span><span class="p">(</span>
-      <span class="n">forStateRestoration</span><span class="p">:</span> <span class="n">dataStore</span><span class="p">,</span>
-      <span class="n">restorationIdentifier</span><span class="p">:</span> <span class="s">&quot;DataSource&quot;</span>
-    <span class="p">)</span>
-    <span class="k">return</span> <span class="kc">true</span>
-<span class="p">}</span>
-</pre></div>
-
-
-<h2>Tell iOS how to create or locate the dependency</h2>
-<p>Any registered dependency must conform to ‘UIStateRestoring’ protocol 
-(UIViewControllers automatically conform to this) and allows you to define a restoration class</p>
-<div class="highlight"><pre><span></span><span class="kr">optional</span> <span class="kd">var</span> <span class="nv">objectRestorationClass</span><span class="p">:</span> <span class="bp">UIObjectRestoration</span><span class="p">.</span><span class="kr">Type</span><span class="p">?</span> <span class="p">{</span> <span class="kr">get</span> <span class="p">}</span>
-</pre></div>
-
-
-<p>If you return nil from this method, UIKIT assumes the app startup code recreated 
-the dependency already and will be able to find it as you’ve registered it to a restoration id.</p>
-<p>If you do specify a restoration class, it needs to define the following static method:</p>
-<div class="highlight"><pre><span></span><span class="kd">static</span> <span class="kd">func</span> <span class="nf">object</span><span class="p">(</span><span class="n">withRestorationIdentifierPath</span> <span class="n">identifierComponents</span><span class="p">:</span> <span class="p">[</span><span class="nb">String</span><span class="p">],</span> <span class="n">coder</span><span class="p">:</span> <span class="bp">NSCoder</span><span class="p">)</span> <span class="p">-&gt;</span> <span class="bp">UIStateRestoring</span><span class="p">?</span>
-</pre></div>
-
-
-<p>It can return a reference to a global, init a new instance or return nil if no restoration is possible. </p>
-<h2>Restoring the Dependency as part of the Controller Decode Process</h2>
-<p>Now when you restore the view controllers state, any request to decode the 
-datasources’s restoration id will simply be passed the registered instance.
-Voila! You can now reconstruct the VC’s dependencies.</p>
-<div class="highlight"><pre><span></span><span class="kd">class</span> <span class="nc">controller</span> <span class="p">:</span> <span class="bp">UIViewController</span> <span class="p">{</span>
-    <span class="c1">// ...</span>
-
-    <span class="kr">override</span> <span class="kd">func</span> <span class="nf">decodeRestorableState</span><span class="p">(</span><span class="n">with</span><span class="p">:</span> <span class="bp">NSCoder</span><span class="p">)</span> <span class="p">{</span>
-        <span class="kc">super</span><span class="p">.</span><span class="n">decodeRestorableState</span><span class="p">(</span><span class="n">with</span><span class="p">:</span> <span class="n">with</span><span class="p">)</span>
-        <span class="n">guard</span>
-            <span class="kd">let</span> <span class="nv">object</span> <span class="p">=</span> <span class="n">with</span><span class="p">.</span><span class="n">decodeObject</span><span class="p">(</span><span class="n">forKey</span><span class="p">:</span> <span class="s">&quot;DataSource&quot;</span><span class="p">),</span> <span class="c1">// Any </span>
-            <span class="kd">let</span> <span class="nv">dataSource</span> <span class="p">=</span> <span class="n">object</span> <span class="kc">as</span><span class="p">?</span> <span class="n">DateSourceKlass</span> 
-        <span class="k">else</span> <span class="p">{</span>
-            <span class="k">return</span>
-        <span class="p">}</span>
-        <span class="kc">self</span><span class="p">.</span><span class="n">dataSource</span> <span class="p">=</span> <span class="n">dataSource</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</pre></div>
-
-
-<p>The one draw back to this approach, as others have noted, is how it separates 
-Controller Restoration and Dependency Restoration into 2 distinct phases. 
-You’ve just lost your paddle if you’ve declared your dependencies as const.
-I think this hints at UIKits own opinion that controllers don’t actually own 
-their datasources and so should be declared weakly.</p>
-<h2>References</h2>
-<ul>
-<li><a href="https://developer.apple.com/videos/play/wwdc2013/222/">https://developer.apple.com/videos/play/wwdc2013/222/</a></li>
-</ul>
-  </div>
-  <hr />
-</article>
-<article>
-  <header>
-    <h2><a href="/note-to-unowned-self.html#note-to-unowned-self">Note to Unowned Self</a></h2>
-    <p>
-          Posted on Sun 20 November 2016 in <a href="/category/tech.html">Tech</a>
-
-
-          &#8226;     Tagged with
-
-              <a href="/tag/swift.html">Swift</a>,              <a href="/tag/ios.html">iOS</a>
-    </p>
-  </header>
-  <div>
-      <p>Its easy to think that the answer to all closure woes is to just declare self unowned - no more reference cycles for me!
+<p>Recreating the hierarchy of view controllers is indeed ...</p></div>
+	Category:
+	<span itemprop="articleSection">
+		<a href="./category/tech.html" rel="category">Tech</a>
+	</span>
+	Tags:
+ 
+	<span itemprop="keywords">
+		<a href="./tag/swift.html" rel="tag">Swift</a>
+	</span>
+	<span itemprop="keywords">
+		<a href="./tag/ios.html" rel="tag">iOS</a>
+	</span>
+</div>
+<hr>
+        
+<div class="article" itemscope itemtype="http://schema.org/BlogPosting">
+	<a href="./note-to-unowned-self.html">
+		<h2 itemprop="name headline">Note to Unowned Self</h2>
+	</a>
+	<time datetime="2016-11-20T00:00:00+01:00" itemprop="datePublished">Sun 20 November 2016</time>
+	&nbsp;—&nbsp;
+	<div class="summary"><p>Its easy to think that the answer to all closure woes is to just declare self unowned - no more reference cycles for me!
 However this is a very easy way to crash! Been there, done that, never again. </p>
 <p>let me translate what 'unowned' means: </p>
 <blockquote>
-<p>I am not the owner of this reference but I am <strong>100%</strong> sure it will exist when I need it.</p>
-</blockquote>
-<p>Said like that, you can see thats a pretty sizeable assumption! </p>
-<p>A Weak reference, most of the time, will be a better bet because it makes you deal with possiblity of nil. </p>
-  </div>
-  <hr />
-</article>
-<article>
-  <header>
-    <h2><a href="/python-bindings-for-targetprocess.html#python-bindings-for-targetprocess">Python Bindings for TargetProcess</a></h2>
-    <p>
-          Posted on Sat 28 May 2016 in <a href="/category/tech.html">Tech</a>
-
-
-          &#8226;     Tagged with
-
-              <a href="/tag/python.html">Python</a>,              <a href="/tag/restapis.html">RestAPIs</a>
-    </p>
-  </header>
-  <div>
-      <p>Where can you find them? In one of my side projects: <a href='https://github.com/ash30/tpapi'>tpapi</a> - an unoffical python client for TargetProcess. It takes care of interacting with the REST api and returns nice model objects
+<p>I am not the owner of ...</p></blockquote></div>
+	Category:
+	<span itemprop="articleSection">
+		<a href="./category/tech.html" rel="category">Tech</a>
+	</span>
+	Tags:
+ 
+	<span itemprop="keywords">
+		<a href="./tag/swift.html" rel="tag">Swift</a>
+	</span>
+	<span itemprop="keywords">
+		<a href="./tag/ios.html" rel="tag">iOS</a>
+	</span>
+</div>
+<hr>
+        
+<div class="article" itemscope itemtype="http://schema.org/BlogPosting">
+	<a href="./python-bindings-for-targetprocess.html">
+		<h2 itemprop="name headline">Python Bindings for TargetProcess</h2>
+	</a>
+	<time datetime="2016-05-28T00:00:00+02:00" itemprop="datePublished">Sat 28 May 2016</time>
+	&nbsp;—&nbsp;
+	<div class="summary"><p>Where can you find them? In one of my side projects: <a href='https://github.com/ash30/tpapi'>tpapi</a> - an unoffical python client for TargetProcess. It takes care of interacting with the REST api and returns nice model objects
 for you to interact with. Some useful features worth mentioning:</p>
 <h3>Transparent Pagination of Resource Requests</h3>
-<p>Every collection of entities is actually a generator which will lazily send http requests
-as needed. This way we can expose a standard iterator interface over paginated resources.</p>
-<h3>Nested Model Lookup</h3>
-<p>For resource or collection attributes we return an iterator over the correct class automatically
-so you can continue to chain queries or pluck values.</p>
-<p>Theres also a gist showcasing usage: <a href="https://gist.github.com/ash30/cfebdf200df7e96242755c80c06ade91">here</a></p>
-  </div>
-  <hr />
-</article>
-<article>
-  <header>
-    <h2><a href="/testing-mac-gatekeeper.html#testing-mac-gatekeeper">Testing Mac Gatekeeper</a></h2>
-    <p>
-          Posted on Wed 29 April 2015 in <a href="/category/tech.html">Tech</a>
-
-
-          &#8226;     Tagged with
-
-              <a href="/tag/testing.html">Testing</a>,              <a href="/tag/osx.html">OSX</a>
-    </p>
-  </header>
-  <div>
-      <p>Gatekeeper on macOS guards against the execution and installation of applications from unknown sources.
+<p>Every collection of ...</p></div>
+	Category:
+	<span itemprop="articleSection">
+		<a href="./category/tech.html" rel="category">Tech</a>
+	</span>
+	Tags:
+ 
+	<span itemprop="keywords">
+		<a href="./tag/python.html" rel="tag">Python</a>
+	</span>
+	<span itemprop="keywords">
+		<a href="./tag/restapis.html" rel="tag">RestAPIs</a>
+	</span>
+</div>
+<hr>
+        
+<div class="article" itemscope itemtype="http://schema.org/BlogPosting">
+	<a href="./testing-mac-gatekeeper.html">
+		<h2 itemprop="name headline">Testing Mac Gatekeeper</h2>
+	</a>
+	<time datetime="2015-04-29T00:00:00+02:00" itemprop="datePublished">Wed 29 April 2015</time>
+	&nbsp;—&nbsp;
+	<div class="summary"><p>Gatekeeper on macOS guards against the execution and installation of applications from unknown sources.
 In order to pass this security check an application needs to be correctly signed which means its
 a good requirement to check before a release.</p>
-<p>The key gotcha to watch out for when testing is to ensure the executable has been quarantined.
-By that I mean it has the ''com.apple.quarantine'' extended attribute present as Gatekeeper 
-is triggered specifically at the first time you execute or install a quarantined file.</p>
-<p>To verify the existence of the quarantine flag, you can show 'ls' output in terminal and look
-for the '@' at the end of the permission fields. Better yet you can use the 'xattr' command to
-show any extended attributes that exist on a file.</p>
-<div class="highlight"><pre><span></span>$ xattr /path/to/file
-
-com.apple.quarantine
-</pre></div>
-
-
-<p>A programatic method to verify if the application's signature will pass gate keeper is to run the 'spctl' command.</p>
-<div class="highlight"><pre><span></span>spctl --assess --type install ./path/to/file
-</pre></div>
-
-
-<p>Spctl will exit zero on success or return one if anything failed.</p>
-<p>Additionally you can check the actual signature use 'pkgutil' for futher details.</p>
-<div class="highlight"><pre><span></span>pkgutil --check-signature ./path/to/file
-</pre></div>
-  </div>
-  <hr />
-</article>
-<article>
-  <header>
-    <h2><a href="/python-descriptor-notes.html#python-descriptor-notes">Python Descriptor Notes</a></h2>
-    <p>
-          Posted on Tue 11 March 2014 in <a href="/category/tech.html">Tech</a>
-
-
-          &#8226;     Tagged with
-
-              <a href="/tag/python.html">Python</a>
-    </p>
-  </header>
-  <div>
-      <ul>
+<p>The key gotcha to watch out for when testing is to ...</p></div>
+	Category:
+	<span itemprop="articleSection">
+		<a href="./category/tech.html" rel="category">Tech</a>
+	</span>
+	Tags:
+ 
+	<span itemprop="keywords">
+		<a href="./tag/testing.html" rel="tag">Testing</a>
+	</span>
+	<span itemprop="keywords">
+		<a href="./tag/osx.html" rel="tag">OSX</a>
+	</span>
+</div>
+<hr>
+        
+<div class="article" itemscope itemtype="http://schema.org/BlogPosting">
+	<a href="./python-descriptor-notes.html">
+		<h2 itemprop="name headline">Python Descriptor Notes</h2>
+	</a>
+	<time datetime="2014-03-11T00:00:00+01:00" itemprop="datePublished">Tue 11 March 2014</time>
+	&nbsp;—&nbsp;
+	<div class="summary"><ul>
 <li>Descriptors are any object that conform to the descriptor protocol __get__,__set__ and __del__. Properties are a common example</li>
 <li>Descriptors are class level objects and you must use the obj reference passed to it in order to access the parent object.</li>
-<li>This is because the descriptor protocol methods are invoked via an objects __getattribute__ - so be careful when overriding!</li>
-<li>Weirdly hasattr returns false for testing if an class objects holds a specific 
-property.</li>
+<li>This is because the descriptor protocol methods are invoked ...</li></ul></div>
+	Category:
+	<span itemprop="articleSection">
+		<a href="./category/tech.html" rel="category">Tech</a>
+	</span>
+	Tags:
+ 
+	<span itemprop="keywords">
+		<a href="./tag/python.html" rel="tag">Python</a>
+	</span>
+</div>
+<hr>
+ <div class="pagination">
+<ul>
+    <li class="prev disabled"><a href="#">&larr; Previous</a></li>
+
+    <li class="active"><a href="./index.html">1</a></li>
+
+    <li class="next disabled"><a href="#">&rarr; Next</a></li>
+
 </ul>
-<h2>Example</h2>
-<p><script src="https://gist.github.com/ash30/cca24018f5153cf51b8c674d3fb94f5f.js"></script></p>
-<h2>References</h2>
-<p><a href="www.docs.python.org/2/howto/descriptor.html">www.docs.python.org/2/howto/descriptor.html</a></p>
-  </div>
-</article>
-
-  <div class="pagination">
-  </div>
-
-
-
-
-    <footer>
-<p>&copy; Ashley Arthur 2016</p>
-<p>    Powered by <a href="http://getpelican.com" target="_blank">Pelican</a> - <a href="https://github.com/alexandrevicenzi/flex" target="_blank">Flex</a> theme by <a href="http://alexandrevicenzi.com" target="_blank">Alexandre Vicenzi</a>
-</p>    </footer>
-  </main>
-
-
-
-
-
-<script type="application/ld+json">
-{
-  "@context" : "http://schema.org",
-  "@type" : "Blog",
-  "name": " Tech Notes ",
-  "url" : "",
-  "image": "/images/portrait.jpg",
-  "description": "Ashley Arthur's Thoughts and Writings"
-}
+</div> 		</div>
+	</div> 	<!-- <hr> -->
+</div> <!-- /container -->
+<footer class="aw-footer bg-danger">
+	<div class="container"> <!-- footer -->
+		<div class="row">
+			<div class="col-md-10 col-md-offset-1">
+				<div class="row">
+					<div class="col-md-3">
+						<h4>Navigation</h4>
+						<ul class="list-unstyled my-list-style">
+							<li><a href="."> Home</a></li>
+							<li><a href="./archives.html"><i class="fa fa-Archives "></i> Archives</a></li>
+							<li><a href="./tags.html"><i class="fa fa-Tags "></i> Tags</a></li>
+						</ul>
+					</div>
+					<div class="col-md-3">
+						<h4>Author</h4>
+						<ul class="list-unstyled my-list-style">
+							<li><a href="https://uk.linkedin.com/in/ashley-arthur-4a918635">linkedin</a></li>
+							<li><a href="https://github.com/ash30">github</a></li>
+							<li><a href="https://www.flickr.com/photos/ash30">flickr</a></li>
+						</ul>
+					</div>
+					<div class="col-md-3">
+						<h4>Categories</h4>
+						<ul class="list-unstyled my-list-style">
+							<li><a href="./category/tech.html">Tech (6)</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</footer>
+<div class="container">
+	<div class="row">
+		<div class="col-md-12 text-center center-block aw-bottom">
+			<p>&copy; Ashley Arthur 2016</p>
+			<p>Powered by Pelican</p>
+		</div>
+	</div>
+</div>
+<!-- JavaScript -->
+<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+jQuery(document).ready(function($) {
+	$("div.collapseheader").click(function () {
+		$header = $(this).children("span").first();
+		$codearea = $(this).children(".input_area");
+		$codearea.slideToggle(500, function () {
+			$header.text(function () {
+				return $codearea.is(":visible") ? "Collapse Code" : "Expand Code";
+			});
+		});
+	});
+});
 </script>
 </body>
 </html>
