@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Margin anchors vs Dimension anchors — Ashley Arthur</title>
+	<meta name="description" content="Title: Margin anchors vs Dimension anchors; Date: 2017-04-17; Author: Ashley Arthur">
+	<meta name="author" content="Ashley Arthur">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+	<!--[if lt IE 9]>
+		<script src="http://ashleyarthur.co.uk/theme/html5.js"></script>
+		<![endif]-->
+	<link href="http://ashleyarthur.co.uk/theme/css/ipython.css" rel="stylesheet">
+	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+	<link href="//maxcdn.bootstrapcdn.com/bootswatch/3.2.0/simplex/bootstrap.min.css" rel="stylesheet">
+	<link href="http://ashleyarthur.co.uk/theme/css/local.css" rel="stylesheet">
+	<link href="http://ashleyarthur.co.uk/theme/css/pygments.css" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+	<div class="page-header">
+		<h1><a href="http://ashleyarthur.co.uk/">Ashley Arthur</a>
+			<br>	</div>
+	<div class="row">
+		<div class="col-md-8 col-md-offset-2">
+<div class="article" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="text-center article-header">
+		<h1 itemprop="name headline" class="article-title">Margin anchors vs Dimension anchors</h1>
+		<time datetime="2017-04-17T00:00:00+02:00" itemprop="datePublished">Mon 17 April 2017</time>
+	</div>
+	<div>
+		Category:
+		<span itemprop="articleSection">
+			<a href="http://ashleyarthur.co.uk/category/tech.html" rel="category">Tech</a>
+		</span>
+	</div>
+ 
+	<div>
+		Tags:
+		<span itemprop="keywords">
+			<a href="http://ashleyarthur.co.uk/tag/swift.html" rel="tag">Swift</a>
+		</span>
+		<span itemprop="keywords">
+			<a href="http://ashleyarthur.co.uk/tag/ios-gotcha.html" rel="tag">iOS-Gotcha</a>
+		</span>
+	</div>
+	<div itemprop="articleBody" class="article-body"><p>You've tested your view layout with dynamic typing right? If not read on...</p>
+<p>If you want a view to completely fill its super views and dynamically adjust to size changes,
+there are two configurations of autolayout constraints you could potentially use:</p>
+<div class="highlight"><pre><span></span><span class="kd">let</span> <span class="nv">constraints</span> <span class="p">=</span> <span class="p">[</span>
+    <span class="n">view</span><span class="p">.</span><span class="n">centerXAnchor</span><span class="p">.</span><span class="n">constraint</span><span class="p">(</span><span class="n">equalTo</span><span class="p">:</span> <span class="n">superview</span><span class="p">.</span><span class="n">layoutMarginsGuide</span><span class="p">.</span><span class="n">centerXAnchor</span><span class="p">),</span>
+    <span class="n">view</span><span class="p">.</span><span class="n">centerYAnchor</span><span class="p">.</span><span class="n">constraint</span><span class="p">(</span><span class="n">equalTo</span><span class="p">:</span> <span class="n">superview</span><span class="p">.</span><span class="n">layoutMarginsGuide</span><span class="p">.</span><span class="n">centerYAnchor</span><span class="p">),</span>
+    <span class="n">view</span><span class="p">.</span><span class="n">heightAnchor</span><span class="p">.</span><span class="n">constraint</span><span class="p">(</span><span class="n">equalTo</span><span class="p">:</span> <span class="n">superview</span><span class="p">.</span><span class="n">heightAnchor</span><span class="p">)</span>
+    <span class="n">view</span><span class="p">.</span><span class="n">widthAnchor</span><span class="p">.</span><span class="n">constraint</span><span class="p">(</span><span class="n">equalTo</span><span class="p">:</span> <span class="n">superview</span><span class="p">.</span><span class="n">widthAnchor</span><span class="p">)</span>
+<span class="p">]</span>
+
+<span class="kd">let</span> <span class="nv">altConstraints</span> <span class="p">=</span> <span class="p">[</span>
+    <span class="n">stackView</span><span class="p">.</span><span class="n">leadingAnchor</span><span class="p">.</span><span class="n">constraint</span><span class="p">(</span><span class="n">equalTo</span><span class="p">:</span> <span class="n">superview</span><span class="p">.</span><span class="n">layoutMarginsGuide</span><span class="p">.</span><span class="n">leadingAnchor</span><span class="p">),</span>
+    <span class="n">stackView</span><span class="p">.</span><span class="n">trailingAnchor</span><span class="p">.</span><span class="n">constraint</span><span class="p">(</span><span class="n">equalTo</span><span class="p">:</span><span class="n">superview</span><span class="p">.</span><span class="n">layoutMarginsGuide</span><span class="p">.</span><span class="n">trailingAnchor</span><span class="p">),</span>
+    <span class="n">stackView</span><span class="p">.</span><span class="n">topAnchor</span><span class="p">.</span><span class="n">constraint</span><span class="p">(</span><span class="n">equalTo</span><span class="p">:</span> <span class="n">superview</span><span class="p">.</span><span class="n">layoutMarginsGuide</span><span class="p">.</span><span class="n">topAnchor</span><span class="p">),</span>
+    <span class="n">stackView</span><span class="p">.</span><span class="n">bottomAnchor</span><span class="p">.</span><span class="n">constraint</span><span class="p">(</span><span class="n">equalTo</span><span class="p">:</span> <span class="n">superview</span><span class="p">.</span><span class="n">layoutMarginsGuide</span><span class="p">.</span><span class="n">bottomAnchor</span><span class="p">),</span>
+<span class="p">]</span>
+</pre></div>
+
+
+<p>What's the difference between the two? When using the leading/trailing top/bottom anchors, the child view will respect layout margins, meaning 
+there will be some padding between the child and super view due to UIEdgeInsets.</p>
+<p>Layout margins change with dynamic type sizes, even when the cell has no text based content. This is because table cells have the property
+<code>self.contentView.preservesSuperviewLayoutMargins</code> which means table view margin changes are inherited per cell.</p>
+<p>So if your table cell content is unexpectedly changing size with dynamic type changes, check how you're handling layout margin inheritance.</p></div>
+	<hr>
+</div>
+		</div>
+	</div> 	<!-- <hr> -->
+</div> <!-- /container -->
+<footer class="aw-footer bg-danger">
+	<div class="container"> <!-- footer -->
+		<div class="row">
+			<div class="col-md-10 col-md-offset-1">
+				<div class="row">
+					<div class="col-md-3">
+						<h4>Navigation</h4>
+						<ul class="list-unstyled my-list-style">
+							<li><a href="http://ashleyarthur.co.uk"> Home</a></li>
+							<li><a href="http://ashleyarthur.co.uk/archives.html"><i class="fa fa-Archives "></i> Archives</a></li>
+							<li><a href="http://ashleyarthur.co.uk/tags.html"><i class="fa fa-Tags "></i> Tags</a></li>
+						</ul>
+					</div>
+					<div class="col-md-3">
+						<h4>Author</h4>
+						<ul class="list-unstyled my-list-style">
+							<li><a href="https://uk.linkedin.com/in/ashley-arthur-4a918635">linkedin</a></li>
+							<li><a href="https://github.com/ash30">github</a></li>
+							<li><a href="https://www.flickr.com/photos/ash30">flickr</a></li>
+						</ul>
+					</div>
+					<div class="col-md-3">
+						<h4>Categories</h4>
+						<ul class="list-unstyled my-list-style">
+							<li><a href="http://ashleyarthur.co.uk/category/tech.html">Tech (8)</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</footer>
+<div class="container">
+	<div class="row">
+		<div class="col-md-12 text-center center-block aw-bottom">
+			<p>&copy; Ashley Arthur 2016</p>
+			<p>Powered by Pelican</p>
+		</div>
+	</div>
+</div>
+<!-- JavaScript -->
+<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+jQuery(document).ready(function($) {
+	$("div.collapseheader").click(function () {
+		$header = $(this).children("span").first();
+		$codearea = $(this).children(".input_area");
+		$codearea.slideToggle(500, function () {
+			$header.text(function () {
+				return $codearea.is(":visible") ? "Collapse Code" : "Expand Code";
+			});
+		});
+	});
+});
+</script>
+</body>
+</html>
