@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title>Use Unittests to Explore 3rd Party APIs — Ashley Arthur</title>
-	<meta name="description" content="Title: Use Unittests to Explore 3rd Party APIs; Date: 2017-03-10; Author: Ashley Arthur">
+	<title>HueInspired - an iOS App Post Mortem — Ashley Arthur</title>
+	<meta name="description" content="Title: HueInspired - an iOS App Post Mortem; Date: 2017-05-02; Author: Ashley Arthur">
 	<meta name="author" content="Ashley Arthur">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
@@ -26,8 +26,8 @@
 		<div class="col-md-8 col-md-offset-2">
 <div class="article" itemscope itemtype="http://schema.org/BlogPosting">
 	<div class="text-center article-header">
-		<h1 itemprop="name headline" class="article-title">Use Unittests to Explore 3rd Party APIs</h1>
-		<time datetime="2017-03-10T00:00:00+01:00" itemprop="datePublished">Fri 10 March 2017</time>
+		<h1 itemprop="name headline" class="article-title">HueInspired - an iOS App Post Mortem</h1>
+		<time datetime="2017-05-02T00:00:00+02:00" itemprop="datePublished">Tue 02 May 2017</time>
 	</div>
 	<div>
 		Category:
@@ -39,18 +39,26 @@
 	<div>
 		Tags:
 		<span itemprop="keywords">
-			<a href="http://ashleyarthur.co.uk/tag/python.html" rel="tag">Python</a>
+			<a href="http://ashleyarthur.co.uk/tag/swift.html" rel="tag">Swift</a>
+		</span>
+		<span itemprop="keywords">
+			<a href="http://ashleyarthur.co.uk/tag/ios.html" rel="tag">iOS</a>
 		</span>
 	</div>
-	<div itemprop="articleBody" class="article-body"><p>One of the ideas I've adopted recently is to use unittests to assert the contract between you and a 3rd party API.
-It's pretty normal to explore api usage in the REPL but by writing it formally as a series of tests you can record
-your findings and review them next time. Even better, you can tests your assumptions if the library ever changes.</p>
-<p>FileIO is always a little platfrom specific, even with cross platform librarys like
-python's <code>os.path</code>. I was tasked recently with porting some tools to windows and found myself
-questioning some of my long held assumptions when working with file paths. The obvious question
-is what happens with all the backslashes?</p>
-<p>Without futher ado:</p>
-<script src="https://gist.github.com/ash30/cb2e77610bfbd789767ff9eb3ee2d599.js"></script></div>
+	<div itemprop="articleBody" class="article-body"><p>My current project is “HueInspired” - an iOS app for color palette generation from photos and I’m coming close to completing v1.0. Its been a blast and as a form of catharsis / chance to share what I learnt, I’m here to coherently ramble about the interesting points of the journey.</p>
+<h3>Swinject</h3>
+<p>In the initial prototype of the app I did my dependency injection manually through a combination of initialiser injection and pass through parameters. It worked but there was a lot of boiler plate that I had to maintain and it also conflated ownership as it required some classes to hold additional dependencies purely to pass it to constructors at runtime.</p>
+<p>Swinject definitely cleaned up the boilerplate, centralising construction in container callbacks and through its storyboard extension helped remove any hardcoding in the view controllers. I really liked the fact singletons became implementation detail of the class rather than the calling code, helping to keep things testable.</p>
+<p>The down side was I faced a lot of implicitly unwrapped optionals in said callbacks which makes me uneasy. It almost feels like you should include the Swinject container in your test coverage just to make sure all those assumptions hold, especially for parts of the object graph created dynamically at runtime. </p>
+<h3>CoreData</h3>
+<p>The main difficulty I had was ensuring reliable change notifications when working with FetchResultsController and multiple contexts. Mike Abdullah writes about it here: http://mikeabdullah.net/merging-saved-changes-betwe.html but in short: Any new objects that are merged into a context will only receive future update notifications if they are retained.</p>
+<p>Ultimately it meant merging in new objects was easy, but merging in edits for the same object was tricky. I generally came to the conclusion that any user interaction with managed objects should happen in the shared view context to ensure all FetchResultsControllers can see the change.</p>
+<hr />
+<p>Overall I’m still a fan of both frameworks just now slightly more aware of the trade offs involved. 
+Swinject is a pleasure to use and Core data, whilst not as charming has first party credentials that make it hard to ignore. </p>
+<p>Regardless, I can't wait to start the next project! </p>
+<h3>References</h3>
+<p><a href="https://github.com/ash30/HueInspired">HueInspired Github Repro</a></p></div>
 	<hr>
 </div>
 		</div>
