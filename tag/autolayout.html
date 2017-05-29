@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title>Testing Mac Gatekeeper — Ashley Arthur</title>
-	<meta name="description" content="Title: Testing Mac Gatekeeper; Date: 2015-04-29; Author: Ashley Arthur">
+	<title>AutoLayout — Ashley Arthur</title>
+	<meta name="description" content="All posts which refer to tag AutoLayout">
 	<meta name="author" content="Ashley Arthur">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
@@ -24,53 +24,15 @@
 			<br>	</div>
 	<div class="row">
 		<div class="col-md-8 col-md-offset-2">
-<div class="article" itemscope itemtype="http://schema.org/BlogPosting">
-	<div class="text-center article-header">
-		<h1 itemprop="name headline" class="article-title">Testing Mac Gatekeeper</h1>
-		<time datetime="2015-04-29T00:00:00+02:00" itemprop="datePublished">Wed 29 April 2015</time>
-	</div>
-	<div>
-		Category:
-		<span itemprop="articleSection">
-			<a href="http://ashleyarthur.co.uk/category/tech.html" rel="category">Tech</a>
-		</span>
-	</div>
- 
-	<div>
-		Tags:
-		<span itemprop="keywords">
-			<a href="http://ashleyarthur.co.uk/tag/testing.html" rel="tag">Testing</a>
-		</span>
-		<span itemprop="keywords">
-			<a href="http://ashleyarthur.co.uk/tag/osx.html" rel="tag">OSX</a>
-		</span>
-	</div>
-	<div itemprop="articleBody" class="article-body"><p>Gatekeeper on macOS guards against the execution and installation of applications from unknown sources.
-In order to pass this security check an application needs to be correctly signed which means its
-a good requirement to check before a release.</p>
-<p>The key gotcha to watch out for when testing is to ensure the executable has been quarantined.
-By that I mean it has the ''com.apple.quarantine'' extended attribute present as Gatekeeper 
-is triggered specifically at the first time you execute or install a quarantined file.</p>
-<p>To verify the existence of the quarantine flag, you can show 'ls' output in terminal and look
-for the '@' at the end of the permission fields. Better yet you can use the 'xattr' command to
-show any extended attributes that exist on a file.</p>
-<div class="highlight"><pre><span></span>$ xattr /path/to/file
-
-com.apple.quarantine
-</pre></div>
-
-
-<p>A programatic method to verify if the application's signature will pass gate keeper is to run the 'spctl' command.</p>
-<div class="highlight"><pre><span></span>spctl --assess --type install ./path/to/file
-</pre></div>
-
-
-<p>Spctl will exit zero on success or return one if anything failed.</p>
-<p>Additionally you can check the actual signature use 'pkgutil' for futher details.</p>
-<div class="highlight"><pre><span></span>pkgutil --check-signature ./path/to/file
-</pre></div></div>
-	<hr>
-</div>
+<h1>Tag <small>AutoLayout</small></h1>
+<table class="table">
+    <tbody>
+        <tr>
+        <td>17 Apr 2017</td>
+        <td><a href='http://ashleyarthur.co.uk/autolayout-margin-anchors-vs-dimension-anchors.html'>Autolayout Margin anchors vs Dimension anchors</a></td>
+        </tr>
+    </tbody>
+</table>
 		</div>
 	</div> 	<!-- <hr> -->
 </div> <!-- /container -->
