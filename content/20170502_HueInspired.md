@@ -1,6 +1,8 @@
 title: HueInspired - an iOS App Post Mortem 
 date: 2nd May 2017
 tags: Swift, iOS
+status: Draft 
+
 
 My current project is “HueInspired” - an iOS app for color palette generation from photos and I’m coming close to completing v1.0. Its been a blast and as a form of catharsis / chance to share what I learnt, I’m here to coherently ramble about the interesting points of the journey.
 
