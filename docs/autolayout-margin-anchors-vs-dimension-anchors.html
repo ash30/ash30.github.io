@@ -2,42 +2,39 @@
 <html lang="en">
 <head>
         <meta charset="utf-8" />
-        <title>Autolayout Margin anchors vs Dimension anchors</title>
-        <link rel="stylesheet" href="./theme/css/main.css" />
+    <title>Ashley Arthur | Autolayout Margin anchors vs Dimension anchors</title>
+    <link rel="shortcut icon" type="image/png" href="./favicon.png">
+    <link rel="shortcut icon" type="image/x-icon" href="./favicon.ico">
+    <link href="http://ashleyarthur.co.uk/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Ashley Arthur Full Atom Feed" />
+    <link rel="stylesheet" href="./theme/css/screen.css" type="text/css" />
+    <link rel="stylesheet" href="./theme/css/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="./theme/css/print.css" type="text/css" media="print" />
+    <meta name="generator" content="Pelican" />
 
-        <!--[if IE]>
-            <script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-        <![endif]-->
+    <meta name="keywords" content="Swift,AutoLayout" />
 </head>
-
-<body id="index" class="home">
-        <header id="banner" class="body">
-                <h1><a href="./">Ashley Arthur </a></h1>
-                <nav><ul>
-                    <li><a href="archives.html">Archives</a></li>
-                    <li class="active"><a href="./category/tech.html">Tech</a></li>
-                </ul></nav>
-        </header><!-- /#banner -->
-<section id="content" class="body">
-  <article>
+<body>
     <header>
-      <h1 class="entry-title">
-        <a href="./autolayout-margin-anchors-vs-dimension-anchors.html" rel="bookmark"
-           title="Permalink to Autolayout Margin anchors vs Dimension anchors">Autolayout Margin anchors vs Dimension anchors</a></h1>
+        <nav>
+            <ul>
+                <li><a href=".">Home</a></li>
+                <li><a href="archives.html">Archives</a></li>
+                <li><a href="https://github.com/ash30">Github</a></li>
+            </ul>
+        </nav>
+        <div class="header_box">
+            <h1><a href=".">Ashley Arthur</a></h1>
+        </div>
     </header>
+    <div id="wrapper">
+        <div id="content">            <h4 class="date">Apr 17, 2017</h4>
 
-    <div class="entry-content">
-<footer class="post-info">
-        <abbr class="published" title="2017-04-17T00:00:00+02:00">
-                Published: Mon 17 April 2017
-        </abbr>
+            <article class="post">
+                <h2 class="title">
+                    <a href="./autolayout-margin-anchors-vs-dimension-anchors.html" rel="bookmark" title="Permanent Link to &quot;Autolayout Margin anchors vs Dimension anchors&quot;">Autolayout Margin anchors vs Dimension anchors</a>
+                </h2>
 
-        <address class="vcard author">
-                By                         <a class="url fn" href="./author/ashley-arthur.html">Ashley Arthur</a>
-        </address>
-<p>In <a href="./category/tech.html">Tech</a>.</p>
-<p>tags: <a href="./tag/swift.html">Swift</a> <a href="./tag/autolayout.html">AutoLayout</a> </p>
-</footer><!-- /.post-info -->      <p>Recently I was testing my custom table cells with dynamic type sizes and even though I didn't have any text present I noticed sub views changing sizes - intrigued, I investigated.</p>
+                <p>Recently I was testing my custom table cells with dynamic type sizes and even though I didn't have any text present I noticed sub views changing sizes - intrigued, I investigated.</p>
 <p>My cell content was ridiculously simple, just one view that filled the whole parent content view, so what could be going wrong? It turns out it was auto layout related.
 When Initially designing the layout I thought of two ways of creating the layout: match the height, width and centres of the parent view OR match horizontal and vertical anchors.</p>
 <div class="highlight"><pre><span></span><span class="kd">let</span> <span class="nv">constraints</span> <span class="p">=</span> <span class="p">[</span>
@@ -60,29 +57,27 @@ When Initially designing the layout I thought of two ways of creating the layout
 <code>self.contentView.preservesSuperviewLayoutMargins</code> which means table view margin changes are inherited by the cell.</p>
 <p>Ultimately this was a case of view hierarchies and layout constraints can appear the same to the user but there can be subtle differences when interacting with other subsystems.</p>
 <p>On a simpler level, don't overlook your layout margins! </p>
-    </div><!-- /.entry-content -->
+                <div class="clear"></div>
 
-  </article>
-</section>
-        <section id="extras" class="body">
-                <div class="social">
-                        <h2>social</h2>
-                        <ul>
-
-                            <li><a href="https://uk.linkedin.com/in/ashley-arthur-4a918635">Linkedin</a></li>
-                            <li><a href="https://github.com/ash30">Github</a></li>
-                            <li><a href="https://www.flickr.com/photos/ash30">Flickr</a></li>
-                        </ul>
-                </div><!-- /.social -->
-        </section><!-- /#extras -->
-
-        <footer id="contentinfo" class="body">
-                <address id="about" class="vcard body">
-                Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>.
-                </address><!-- /#about -->
-
-                <p>The theme is by <a href="http://coding.smashingmagazine.com/2009/08/04/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
-        </footer><!-- /#contentinfo -->
-
+                <div class="info">
+                    <a href="./autolayout-margin-anchors-vs-dimension-anchors.html">posted at 00:00</a>
+                    &nbsp;&middot;&nbsp;<a href="./category/tech.html" rel="tag">Tech</a>
+                    &nbsp;&middot;
+                    &nbsp;<a href="./tag/swift.html" class="tags">Swift</a>
+                    &nbsp;<a href="./tag/autolayout.html" class="tags">AutoLayout</a>
+                </div>
+            </article>
+            <div class="clear"></div>
+            <footer>
+                <p>
+                <a href="https://github.com/jody-frankowski/blue-penguin">Blue Penguin</a> Theme
+                &middot;
+                Powered by <a href="http://getpelican.com">Pelican</a>
+                &middot;
+                <a href="./feeds/all.atom.xml" rel="alternate">Atom Feed</a>
+            </footer>
+        </div>
+        <div class="clear"></div>
+    </div>
 </body>
 </html>

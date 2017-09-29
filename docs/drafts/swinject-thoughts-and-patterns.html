@@ -2,42 +2,39 @@
 <html lang="en">
 <head>
         <meta charset="utf-8" />
-        <title>Swinject Thoughts and Patterns</title>
-        <link rel="stylesheet" href="../theme/css/main.css" />
+    <title>Ashley Arthur | Swinject Thoughts and Patterns</title>
+    <link rel="shortcut icon" type="image/png" href="../favicon.png">
+    <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico">
+    <link href="http://ashleyarthur.co.uk/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Ashley Arthur Full Atom Feed" />
+    <link rel="stylesheet" href="../theme/css/screen.css" type="text/css" />
+    <link rel="stylesheet" href="../theme/css/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../theme/css/print.css" type="text/css" media="print" />
+    <meta name="generator" content="Pelican" />
 
-        <!--[if IE]>
-            <script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-        <![endif]-->
+    <meta name="keywords" content="Swift,iOS,Swinject" />
 </head>
-
-<body id="index" class="home">
-        <header id="banner" class="body">
-                <h1><a href="../">Ashley Arthur </a></h1>
-                <nav><ul>
-                    <li><a href="archives.html">Archives</a></li>
-                    <li class="active"><a href="../category/tech.html">Tech</a></li>
-                </ul></nav>
-        </header><!-- /#banner -->
-<section id="content" class="body">
-  <article>
+<body>
     <header>
-      <h1 class="entry-title">
-        <a href="../drafts/swinject-thoughts-and-patterns.html" rel="bookmark"
-           title="Permalink to Swinject Thoughts and Patterns">Swinject Thoughts and Patterns</a></h1>
+        <nav>
+            <ul>
+                <li><a href="..">Home</a></li>
+                <li><a href="archives.html">Archives</a></li>
+                <li><a href="https://github.com/ash30">Github</a></li>
+            </ul>
+        </nav>
+        <div class="header_box">
+            <h1><a href="..">Ashley Arthur</a></h1>
+        </div>
     </header>
+    <div id="wrapper">
+        <div id="content">            <h4 class="date">Aug 08, 2017</h4>
 
-    <div class="entry-content">
-<footer class="post-info">
-        <abbr class="published" title="2017-08-08T00:00:00+02:00">
-                Published: Tue 08 August 2017
-        </abbr>
+            <article class="post">
+                <h2 class="title">
+                    <a href="../drafts/swinject-thoughts-and-patterns.html" rel="bookmark" title="Permanent Link to &quot;Swinject Thoughts and Patterns&quot;">Swinject Thoughts and Patterns</a>
+                </h2>
 
-        <address class="vcard author">
-                By                         <a class="url fn" href="../author/ashley-arthur.html">Ashley Arthur</a>
-        </address>
-<p>In <a href="../category/tech.html">Tech</a>.</p>
-<p>tags: <a href="../tag/swift.html">Swift</a> <a href="../tag/ios.html">iOS</a> <a href="../tag/swinject.html">Swinject</a> </p>
-</footer><!-- /.post-info -->      <p>I've written before about my admiration for swinject <INSERT HERE>, its a great dependency injection framework which
+                <p>I've written before about my admiration for swinject <INSERT HERE>, its a great dependency injection framework which
 greatly helps clean up and centralise the required glue code to setup related objects.</p>
 <p>Having used it throughout the development process for my side project HueInspired, I thought I'd take the time to
 write about some the patterns I see around my own usage of Swinject.</p>
@@ -77,29 +74,28 @@ that can injected in as required. </p>
 via the ViewController type. The initial construction of the object will inject in the factory so you are able centralise
 construction logic in the container and just give out a strict interface.</p>
 <p>This is prefered to having an object take the container as a dependency.</p>
-    </div><!-- /.entry-content -->
+                <div class="clear"></div>
 
-  </article>
-</section>
-        <section id="extras" class="body">
-                <div class="social">
-                        <h2>social</h2>
-                        <ul>
-
-                            <li><a href="https://uk.linkedin.com/in/ashley-arthur-4a918635">Linkedin</a></li>
-                            <li><a href="https://github.com/ash30">Github</a></li>
-                            <li><a href="https://www.flickr.com/photos/ash30">Flickr</a></li>
-                        </ul>
-                </div><!-- /.social -->
-        </section><!-- /#extras -->
-
-        <footer id="contentinfo" class="body">
-                <address id="about" class="vcard body">
-                Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>.
-                </address><!-- /#about -->
-
-                <p>The theme is by <a href="http://coding.smashingmagazine.com/2009/08/04/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
-        </footer><!-- /#contentinfo -->
-
+                <div class="info">
+                    <a href="../drafts/swinject-thoughts-and-patterns.html">posted at 00:00</a>
+                    &nbsp;&middot;&nbsp;<a href="../category/tech.html" rel="tag">Tech</a>
+                    &nbsp;&middot;
+                    &nbsp;<a href="../tag/swift.html" class="tags">Swift</a>
+                    &nbsp;<a href="../tag/ios.html" class="tags">iOS</a>
+                    &nbsp;<a href="../tag/swinject.html" class="tags">Swinject</a>
+                </div>
+            </article>
+            <div class="clear"></div>
+            <footer>
+                <p>
+                <a href="https://github.com/jody-frankowski/blue-penguin">Blue Penguin</a> Theme
+                &middot;
+                Powered by <a href="http://getpelican.com">Pelican</a>
+                &middot;
+                <a href="../feeds/all.atom.xml" rel="alternate">Atom Feed</a>
+            </footer>
+        </div>
+        <div class="clear"></div>
+    </div>
 </body>
 </html>

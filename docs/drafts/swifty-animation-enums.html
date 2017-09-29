@@ -2,42 +2,39 @@
 <html lang="en">
 <head>
         <meta charset="utf-8" />
-        <title>Swifty Animation Enums</title>
-        <link rel="stylesheet" href="../theme/css/main.css" />
+    <title>Ashley Arthur | Swifty Animation Enums</title>
+    <link rel="shortcut icon" type="image/png" href="../favicon.png">
+    <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico">
+    <link href="http://ashleyarthur.co.uk/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Ashley Arthur Full Atom Feed" />
+    <link rel="stylesheet" href="../theme/css/screen.css" type="text/css" />
+    <link rel="stylesheet" href="../theme/css/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../theme/css/print.css" type="text/css" media="print" />
+    <meta name="generator" content="Pelican" />
 
-        <!--[if IE]>
-            <script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-        <![endif]-->
+    <meta name="keywords" content="Swift,iOS" />
 </head>
-
-<body id="index" class="home">
-        <header id="banner" class="body">
-                <h1><a href="../">Ashley Arthur </a></h1>
-                <nav><ul>
-                    <li><a href="archives.html">Archives</a></li>
-                    <li class="active"><a href="../category/tech.html">Tech</a></li>
-                </ul></nav>
-        </header><!-- /#banner -->
-<section id="content" class="body">
-  <article>
+<body>
     <header>
-      <h1 class="entry-title">
-        <a href="../drafts/swifty-animation-enums.html" rel="bookmark"
-           title="Permalink to Swifty Animation Enums">Swifty Animation Enums</a></h1>
+        <nav>
+            <ul>
+                <li><a href="..">Home</a></li>
+                <li><a href="archives.html">Archives</a></li>
+                <li><a href="https://github.com/ash30">Github</a></li>
+            </ul>
+        </nav>
+        <div class="header_box">
+            <h1><a href="..">Ashley Arthur</a></h1>
+        </div>
     </header>
+    <div id="wrapper">
+        <div id="content">            <h4 class="date">Jun 13, 2017</h4>
 
-    <div class="entry-content">
-<footer class="post-info">
-        <abbr class="published" title="2017-06-13T00:00:00+02:00">
-                Published: Tue 13 June 2017
-        </abbr>
+            <article class="post">
+                <h2 class="title">
+                    <a href="../drafts/swifty-animation-enums.html" rel="bookmark" title="Permanent Link to &quot;Swifty Animation Enums&quot;">Swifty Animation Enums</a>
+                </h2>
 
-        <address class="vcard author">
-                By                         <a class="url fn" href="../author/ashley-arthur.html">Ashley Arthur</a>
-        </address>
-<p>In <a href="../category/tech.html">Tech</a>.</p>
-<p>tags: <a href="../tag/swift.html">Swift</a> <a href="../tag/ios.html">iOS</a> </p>
-</footer><!-- /.post-info -->      <p>In traditional animation you create a set of discrete drawings that represent the key moments (or key poses) of an action at specific points in time. You then creatively interpolate between these moments to give the illusion of movement. Interestingly I found implicit animations within UIKit follow this mental model quite well.
+                <p>In traditional animation you create a set of discrete drawings that represent the key moments (or key poses) of an action at specific points in time. You then creatively interpolate between these moments to give the illusion of movement. Interestingly I found implicit animations within UIKit follow this mental model quite well.
 When you’re setting the model tree state, its like setting the next key pose and you can then gratefully hand it off to Core Animation to work out the interpolation.</p>
 <p>Animation code can become quite dense as you manipulate the different states of a View / CALayer and it can quickly become hard to manage. Drawing inspiration from traditional keyframe animation, I found a nice pattern that helps me organise my thoughts:</p>
 <script src="https://gist.github.com/ash30/87b259001f615d591c1bf85ec09bfa45.js"></script>
@@ -46,29 +43,27 @@ When you’re setting the model tree state, its like setting the next key pose a
 enum cases to specific configurations of view state, mentally I picture this as each enum case being one pose.
 As the observer's switch is declare in one place you get a high level overview of all the different poses that will complete the action, away from the tested requirements of animation calling code. Additionally, like the keyframe animator, you can worry about exact timing separately, allowing you to refactor more cleanly.</p>
 <p>Its a bit different from my <a href="http://www.imdb.com/name/nm6416515/?ref_=ttfc_fc_cr376">previous animation work</a>, but overall I'm really digging core animation in Swift.</p>
-    </div><!-- /.entry-content -->
+                <div class="clear"></div>
 
-  </article>
-</section>
-        <section id="extras" class="body">
-                <div class="social">
-                        <h2>social</h2>
-                        <ul>
-
-                            <li><a href="https://uk.linkedin.com/in/ashley-arthur-4a918635">Linkedin</a></li>
-                            <li><a href="https://github.com/ash30">Github</a></li>
-                            <li><a href="https://www.flickr.com/photos/ash30">Flickr</a></li>
-                        </ul>
-                </div><!-- /.social -->
-        </section><!-- /#extras -->
-
-        <footer id="contentinfo" class="body">
-                <address id="about" class="vcard body">
-                Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>.
-                </address><!-- /#about -->
-
-                <p>The theme is by <a href="http://coding.smashingmagazine.com/2009/08/04/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
-        </footer><!-- /#contentinfo -->
-
+                <div class="info">
+                    <a href="../drafts/swifty-animation-enums.html">posted at 00:00</a>
+                    &nbsp;&middot;&nbsp;<a href="../category/tech.html" rel="tag">Tech</a>
+                    &nbsp;&middot;
+                    &nbsp;<a href="../tag/swift.html" class="tags">Swift</a>
+                    &nbsp;<a href="../tag/ios.html" class="tags">iOS</a>
+                </div>
+            </article>
+            <div class="clear"></div>
+            <footer>
+                <p>
+                <a href="https://github.com/jody-frankowski/blue-penguin">Blue Penguin</a> Theme
+                &middot;
+                Powered by <a href="http://getpelican.com">Pelican</a>
+                &middot;
+                <a href="../feeds/all.atom.xml" rel="alternate">Atom Feed</a>
+            </footer>
+        </div>
+        <div class="clear"></div>
+    </div>
 </body>
 </html>

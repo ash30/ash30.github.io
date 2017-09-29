@@ -2,42 +2,39 @@
 <html lang="en">
 <head>
         <meta charset="utf-8" />
-        <title>HueInspired - an iOS App Post Mortem</title>
-        <link rel="stylesheet" href="../theme/css/main.css" />
+    <title>Ashley Arthur | HueInspired - an iOS App Post Mortem</title>
+    <link rel="shortcut icon" type="image/png" href="../favicon.png">
+    <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico">
+    <link href="http://ashleyarthur.co.uk/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Ashley Arthur Full Atom Feed" />
+    <link rel="stylesheet" href="../theme/css/screen.css" type="text/css" />
+    <link rel="stylesheet" href="../theme/css/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../theme/css/print.css" type="text/css" media="print" />
+    <meta name="generator" content="Pelican" />
 
-        <!--[if IE]>
-            <script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-        <![endif]-->
+    <meta name="keywords" content="Swift,iOS" />
 </head>
-
-<body id="index" class="home">
-        <header id="banner" class="body">
-                <h1><a href="../">Ashley Arthur </a></h1>
-                <nav><ul>
-                    <li><a href="archives.html">Archives</a></li>
-                    <li class="active"><a href="../category/tech.html">Tech</a></li>
-                </ul></nav>
-        </header><!-- /#banner -->
-<section id="content" class="body">
-  <article>
+<body>
     <header>
-      <h1 class="entry-title">
-        <a href="../drafts/hueinspired-an-ios-app-post-mortem.html" rel="bookmark"
-           title="Permalink to HueInspired - an iOS App Post Mortem">HueInspired - an iOS App Post Mortem</a></h1>
+        <nav>
+            <ul>
+                <li><a href="..">Home</a></li>
+                <li><a href="archives.html">Archives</a></li>
+                <li><a href="https://github.com/ash30">Github</a></li>
+            </ul>
+        </nav>
+        <div class="header_box">
+            <h1><a href="..">Ashley Arthur</a></h1>
+        </div>
     </header>
+    <div id="wrapper">
+        <div id="content">            <h4 class="date">May 02, 2017</h4>
 
-    <div class="entry-content">
-<footer class="post-info">
-        <abbr class="published" title="2017-05-02T00:00:00+02:00">
-                Published: Tue 02 May 2017
-        </abbr>
+            <article class="post">
+                <h2 class="title">
+                    <a href="../drafts/hueinspired-an-ios-app-post-mortem.html" rel="bookmark" title="Permanent Link to &quot;HueInspired - an iOS App Post Mortem&quot;">HueInspired - an iOS App Post Mortem</a>
+                </h2>
 
-        <address class="vcard author">
-                By                         <a class="url fn" href="../author/ashley-arthur.html">Ashley Arthur</a>
-        </address>
-<p>In <a href="../category/tech.html">Tech</a>.</p>
-<p>tags: <a href="../tag/swift.html">Swift</a> <a href="../tag/ios.html">iOS</a> </p>
-</footer><!-- /.post-info -->      <p>My current project is “HueInspired” - an iOS app for color palette generation from photos and I’m coming close to completing v1.0. Its been a blast and as a form of catharsis / chance to share what I learnt, I’m here to coherently ramble about the interesting points of the journey.</p>
+                <p>My current project is “HueInspired” - an iOS app for color palette generation from photos and I’m coming close to completing v1.0. Its been a blast and as a form of catharsis / chance to share what I learnt, I’m here to coherently ramble about the interesting points of the journey.</p>
 <h3>Swinject</h3>
 <p>In the initial prototype of the app I did my dependency injection manually through a combination of initialiser injection and pass through parameters. It worked but there was a lot of boiler plate that I had to maintain and it also conflated ownership as it required some classes to hold additional dependencies purely to pass it to constructors at runtime.</p>
 <p>Swinject definitely cleaned up the boilerplate, centralising construction in container callbacks and through its storyboard extension helped remove any hardcoding in the view controllers. I really liked the fact singletons became implementation detail of the class rather than the calling code, helping to keep things testable.</p>
@@ -45,35 +42,33 @@
 <h3>CoreData</h3>
 <p>The main difficulty I had was ensuring reliable change notifications when working with FetchResultsController and multiple contexts. Mike Abdullah writes about it here: http://mikeabdullah.net/merging-saved-changes-betwe.html but in short: Any new objects that are merged into a context will only receive future update notifications if they are retained.</p>
 <p>Ultimately it meant merging in new objects was easy, but merging in edits for the same object was tricky. I generally came to the conclusion that any user interaction with managed objects should happen in the shared view context to ensure all FetchResultsControllers can see the change.</p>
-<hr />
+<hr>
 <p>Overall I’m still a fan of both frameworks just now slightly more aware of the trade offs involved. 
 Swinject is a pleasure to use and Core data, whilst not as charming has first party credentials that make it hard to ignore. </p>
 <p>Regardless, I can't wait to start the next project! </p>
 <h3>References</h3>
 <p><a href="https://github.com/ash30/HueInspired">HueInspired Github Repro</a></p>
-    </div><!-- /.entry-content -->
+                <div class="clear"></div>
 
-  </article>
-</section>
-        <section id="extras" class="body">
-                <div class="social">
-                        <h2>social</h2>
-                        <ul>
-
-                            <li><a href="https://uk.linkedin.com/in/ashley-arthur-4a918635">Linkedin</a></li>
-                            <li><a href="https://github.com/ash30">Github</a></li>
-                            <li><a href="https://www.flickr.com/photos/ash30">Flickr</a></li>
-                        </ul>
-                </div><!-- /.social -->
-        </section><!-- /#extras -->
-
-        <footer id="contentinfo" class="body">
-                <address id="about" class="vcard body">
-                Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>.
-                </address><!-- /#about -->
-
-                <p>The theme is by <a href="http://coding.smashingmagazine.com/2009/08/04/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
-        </footer><!-- /#contentinfo -->
-
+                <div class="info">
+                    <a href="../drafts/hueinspired-an-ios-app-post-mortem.html">posted at 00:00</a>
+                    &nbsp;&middot;&nbsp;<a href="../category/tech.html" rel="tag">Tech</a>
+                    &nbsp;&middot;
+                    &nbsp;<a href="../tag/swift.html" class="tags">Swift</a>
+                    &nbsp;<a href="../tag/ios.html" class="tags">iOS</a>
+                </div>
+            </article>
+            <div class="clear"></div>
+            <footer>
+                <p>
+                <a href="https://github.com/jody-frankowski/blue-penguin">Blue Penguin</a> Theme
+                &middot;
+                Powered by <a href="http://getpelican.com">Pelican</a>
+                &middot;
+                <a href="../feeds/all.atom.xml" rel="alternate">Atom Feed</a>
+            </footer>
+        </div>
+        <div class="clear"></div>
+    </div>
 </body>
 </html>

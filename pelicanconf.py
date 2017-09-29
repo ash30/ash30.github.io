@@ -18,7 +18,7 @@ OUTPUT_SOURCES_EXTENSION = ".md"
 STATIC_PATHS = ['extra/CNAME']
 
 # Feed generation is usually not desired when developing
-FEED_ALL_ATOM = None
+FEED_ALL_ATOM = 'feeds/all.atom.xml'
 CATEGORY_FEED_ATOM = None
 TRANSLATION_FEED_ATOM = None
 AUTHOR_FEED_ATOM = None
@@ -35,10 +35,8 @@ SOCIAL = (
 )
 
 # Style
-
-# THEME = "/Users/ashleyarthur/Workspace/PROJECTS/pelican-themes_fork/pure"
-
-PYGMENTS_STYLE = 'xcode'
+THEME = "/Users/ashleyarthur/Workspace/PROJECTS/pelican-themes_fork/blue-penguin"
+#PYGMENTS_STYLE = 'xcode'
 
 SITELOGO = SITEURL + '/images/portrait.jpg'
 FAVICON = SITEURL + '/images/favicon.ico'
@@ -48,4 +46,5 @@ MAIN_MENU = True
 MENUITEMS = (
 	('Archives', 'archives.html'),
         # ('Tags', 'tags.html'),
+	('Github',"https://github.com/ash30"),
 )

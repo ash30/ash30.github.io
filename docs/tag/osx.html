@@ -1,38 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-        <meta charset="utf-8" />
-        <title>Ashley Arthur - OSX</title>
-        <link rel="stylesheet" href="../theme/css/main.css" />
-
-        <!--[if IE]>
-            <script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-        <![endif]-->
+    <meta charset="utf-8" />
+    <title>Ashley Arthur | articles tagged "OSX"</title>
+    <link rel="shortcut icon" type="image/png" href="../favicon.png">
+    <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico">
+    <link href="http://ashleyarthur.co.uk/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Ashley Arthur Full Atom Feed" />
+    <link rel="stylesheet" href="../theme/css/screen.css" type="text/css" />
+    <link rel="stylesheet" href="../theme/css/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../theme/css/print.css" type="text/css" media="print" />
+    <meta name="generator" content="Pelican" />
 </head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li class="ephemeral selected"><a href="../tag/osx.html">OSX</a></li>
+                <li><a href="..">Home</a></li>
+                <li><a href="archives.html">Archives</a></li>
+                <li><a href="https://github.com/ash30">Github</a></li>
+            </ul>
+        </nav>
+        <div class="header_box">
+            <h1><a href="..">Ashley Arthur</a></h1>
+        </div>
+    </header>
+    <div id="wrapper">
+        <div id="content">            <h4 class="date">Apr 29, 2015</h4>
 
-<body id="index" class="home">
-        <header id="banner" class="body">
-                <h1><a href="../">Ashley Arthur </a></h1>
-                <nav><ul>
-                    <li><a href="archives.html">Archives</a></li>
-                    <li><a href="../category/tech.html">Tech</a></li>
-                </ul></nav>
-        </header><!-- /#banner -->
+            <article class="post">
+                <h2 class="title">
+                    <a href="../testing-mac-gatekeeper.html" rel="bookmark" title="Permanent Link to &quot;Testing Mac Gatekeeper&quot;">Testing Mac Gatekeeper</a>
+                </h2>
 
-            <aside id="featured" class="body">
-                <article>
-                    <h1 class="entry-title"><a href="../testing-mac-gatekeeper.html">Testing Mac Gatekeeper</a></h1>
-<footer class="post-info">
-        <abbr class="published" title="2015-04-29T00:00:00+02:00">
-                Published: Wed 29 April 2015
-        </abbr>
-
-        <address class="vcard author">
-                By                         <a class="url fn" href="../author/ashley-arthur.html">Ashley Arthur</a>
-        </address>
-<p>In <a href="../category/tech.html">Tech</a>.</p>
-<p>tags: <a href="../tag/testing.html">Testing</a> <a href="../tag/osx.html">OSX</a> </p>
-</footer><!-- /.post-info --><p>Gatekeeper on macOS guards against the execution and installation of applications from unknown sources.
+                <p>Gatekeeper on macOS guards against the execution and installation of applications from unknown sources.
 In order to pass this security check an application needs to be correctly signed which means its
 a good requirement to check before a release.</p>
 <p>The key gotcha to watch out for when testing is to ensure the executable has been quarantined.
@@ -55,27 +56,29 @@ com.apple.quarantine
 <p>Spctl will exit zero on success or return one if anything failed.</p>
 <p>Additionally you can check the actual signature use 'pkgutil' for futher details.</p>
 <div class="highlight"><pre><span></span>pkgutil --check-signature ./path/to/file
-</pre></div>                </article>
-            </aside><!-- /#featured -->
-        <section id="extras" class="body">
-                <div class="social">
-                        <h2>social</h2>
-                        <ul>
+</pre></div>
+                <div class="clear"></div>
 
-                            <li><a href="https://uk.linkedin.com/in/ashley-arthur-4a918635">Linkedin</a></li>
-                            <li><a href="https://github.com/ash30">Github</a></li>
-                            <li><a href="https://www.flickr.com/photos/ash30">Flickr</a></li>
-                        </ul>
-                </div><!-- /.social -->
-        </section><!-- /#extras -->
+                <div class="info">
+                    <a href="../testing-mac-gatekeeper.html">posted at 00:00</a>
+                    &nbsp;&middot;&nbsp;<a href="../category/tech.html" rel="tag">Tech</a>
+                    &nbsp;&middot;
+                    &nbsp;<a href="../tag/testing.html" class="tags">Testing</a>
+                    &nbsp;<a href="../tag/osx.html" class="tags selected">OSX</a>
+                </div>
+            </article>
 
-        <footer id="contentinfo" class="body">
-                <address id="about" class="vcard body">
-                Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>.
-                </address><!-- /#about -->
-
-                <p>The theme is by <a href="http://coding.smashingmagazine.com/2009/08/04/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
-        </footer><!-- /#contentinfo -->
-
+            <div class="clear"></div>
+            <footer>
+                <p>
+                <a href="https://github.com/jody-frankowski/blue-penguin">Blue Penguin</a> Theme
+                &middot;
+                Powered by <a href="http://getpelican.com">Pelican</a>
+                &middot;
+                <a href="../feeds/all.atom.xml" rel="alternate">Atom Feed</a>
+            </footer>
+        </div>
+        <div class="clear"></div>
+    </div>
 </body>
 </html>
