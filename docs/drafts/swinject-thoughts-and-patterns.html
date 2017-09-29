@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <title>Swinject Thoughts and Patterns</title>
+        <link rel="stylesheet" href="../theme/css/main.css" />
+
+        <!--[if IE]>
+            <script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="../">Ashley Arthur </a></h1>
+                <nav><ul>
+                    <li><a href="archives.html">Archives</a></li>
+                    <li class="active"><a href="../category/tech.html">Tech</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="../drafts/swinject-thoughts-and-patterns.html" rel="bookmark"
+           title="Permalink to Swinject Thoughts and Patterns">Swinject Thoughts and Patterns</a></h1>
+    </header>
+
+    <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2017-08-08T00:00:00+02:00">
+                Published: Tue 08 August 2017
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="../author/ashley-arthur.html">Ashley Arthur</a>
+        </address>
+<p>In <a href="../category/tech.html">Tech</a>.</p>
+<p>tags: <a href="../tag/swift.html">Swift</a> <a href="../tag/ios.html">iOS</a> <a href="../tag/swinject.html">Swinject</a> </p>
+</footer><!-- /.post-info -->      <p>I've written before about my admiration for swinject <INSERT HERE>, its a great dependency injection framework which
+greatly helps clean up and centralise the required glue code to setup related objects.</p>
+<p>Having used it throughout the development process for my side project HueInspired, I thought I'd take the time to
+write about some the patterns I see around my own usage of Swinject.</p>
+<h2>Application and Component Assemblers</h2>
+<p>One pattern I found quite successful was one of swinject's more opininiated features: Assemblers. </p>
+<p>Assembler is a protocol which defines a single function <em>Assemble</em>. The Assemblers sole responsibility
+is to setup a container by registering desired factory callbacks.</p>
+<p>When implementing new features to the app, I found it useful for individual features to define their own
+assemblers which would later be applied to the root container. The knowledge of the object graph 
+stays encapsulated within the feature whilst offering and easy way for clients to construct it.</p>
+<h2>Private Containers</h2>
+<p>Sometimes we want the feature to register factories but not have them exposed to anyone who would 
+include the assembler, they might expose construction of internal types that you want to keep isolated to the feature.
+Or they may leak implementation details like Core data.</p>
+<h2>Containers as Abstract Factories</h2>
+<p>If you register and rely on a protocol as your resolve target, you can effectively hide the implementation
+from the client. This ties in naturally with feature level assemblers which already encapsulate the knowledge
+required to setup the supporting objects in the graph.</p>
+<p>In HueInspired, we are able to provide data layer objects without exposing the fact we're using Core Data</p>
+<h2>Conditional inclusion of features</h2>
+<p>When features provide their own assemblers, we can conditionally include them in the app, opening the way
+to ideas like feature flags etc.</p>
+<p>In Hueinspired we have certain debug flags that change how we construct the initial object graph. </p>
+<h2>Rules for unwrapping resolve calls</h2>
+<p>As we must rely on other assemblers registering factories, we cannot always be sure if the resolve call will be fulfilled.
+Hence I try and stick to the following rules</p>
+<ol>
+<li>If the current assembler registers the factory then you can safely force unwrap</li>
+<li>If Type is specified in Core, we can generally force unwrap</li>
+<li>Else it should be left as optional</li>
+</ol>
+<h2>Creating components at runtime</h2>
+<p>Not all objects are constructed at startup, for example we may need to construct a view controller and segue to it based on
+a user interaction. Instead of hard coding the next view controller into the calling code, we can express it as dependency
+that can injected in as required. </p>
+<p>The idea is to define a callback property that provides the next view controller but only exposes itself 
+via the ViewController type. The initial construction of the object will inject in the factory so you are able centralise
+construction logic in the container and just give out a strict interface.</p>
+<p>This is prefered to having an object take the container as a dependency.</p>
+    </div><!-- /.entry-content -->
+
+  </article>
+</section>
+        <section id="extras" class="body">
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+
+                            <li><a href="https://uk.linkedin.com/in/ashley-arthur-4a918635">Linkedin</a></li>
+                            <li><a href="https://github.com/ash30">Github</a></li>
+                            <li><a href="https://www.flickr.com/photos/ash30">Flickr</a></li>
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="http://coding.smashingmagazine.com/2009/08/04/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

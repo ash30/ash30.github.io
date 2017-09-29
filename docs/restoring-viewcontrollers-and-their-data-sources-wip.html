@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <title>Restoring ViewControllers and their Data sources (WIP)</title>
+        <link rel="stylesheet" href="./theme/css/main.css" />
+
+        <!--[if IE]>
+            <script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="./">Ashley Arthur </a></h1>
+                <nav><ul>
+                    <li><a href="archives.html">Archives</a></li>
+                    <li class="active"><a href="./category/tech.html">Tech</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="./restoring-viewcontrollers-and-their-data-sources-wip.html" rel="bookmark"
+           title="Permalink to Restoring ViewControllers and their Data sources (WIP)">Restoring ViewControllers and their Data sources (WIP)</a></h1>
+    </header>
+
+    <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2016-11-25T00:00:00+01:00">
+                Published: Fri 25 November 2016
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="./author/ashley-arthur.html">Ashley Arthur</a>
+        </address>
+<p>In <a href="./category/tech.html">Tech</a>.</p>
+<p>tags: <a href="./tag/swift.html">Swift</a> <a href="./tag/ios.html">iOS</a> </p>
+</footer><!-- /.post-info -->      <p>The traditional flow for restoring view controllers in UIKit goes likes this:</p>
+<ol>
+<li>(Required) Assign restoration identifiers to the view controllers</li>
+<li>(Required) Tell iOS how to create or locate new view controller objects at launch time.</li>
+<li>(Optional) Encode current State for later restoration</li>
+</ol>
+<p>Recreating the hierarchy of view controllers is indeed easy and mostly automated 
+but a lot of the articles out there gloss over how to restore their dependencies
+(hint: Grabbing references to singletons in the VC’s decodeRestorableState method is not the correct answer!)</p>
+<p>Normally you pass dependencies like a baton between controllers. When restoring a controller,
+the segue isn’t called and you get an ‘empty’ controller and its up to you to restore the dependencies.
+It turns out the data source can adopt the same state restoring protocol as the view controller and come along for the ride.  </p>
+<h2>Assign restoration ids for dependencies</h2>
+<p>Normally as apart of the app launch you’ll have some code to initialise 
+backing data sources for your view controllers. As a small extension to this routine,
+we also now have to give them an ID so that the VC’s can indirectly reference them on app restore.</p>
+<p>The app delegate method <strong>willFinishLaunchingWithOptions</strong> is called after bootstrapping 
+but before the restoration process so is a good place to register objects. </p>
+<div class="highlight"><pre><span></span><span class="kd">func</span> <span class="nf">application</span><span class="p">(</span><span class="kc">_</span> <span class="n">application</span><span class="p">:</span> <span class="bp">UIApplication</span><span class="p">,</span> <span class="n">willFinishLaunchingWithOptions</span> <span class="n">launchOptions</span><span class="p">:</span> <span class="p">[</span><span class="n">UIApplicationLaunchOptionsKey</span> <span class="p">:</span> <span class="nb">Any</span><span class="p">]?</span> <span class="p">=</span> <span class="kc">nil</span><span class="p">)</span> <span class="p">-&gt;</span> <span class="nb">Bool</span> <span class="p">{</span>
+
+    <span class="c1">// Register Data Source</span>
+
+    <span class="bp">UIApplication</span><span class="p">.</span><span class="n">registerObject</span><span class="p">(</span>
+      <span class="n">forStateRestoration</span><span class="p">:</span> <span class="n">dataStore</span><span class="p">,</span>
+      <span class="n">restorationIdentifier</span><span class="p">:</span> <span class="s">&quot;DataSource&quot;</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="kc">true</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<h2>Tell iOS how to create or locate the dependency</h2>
+<p>Any registered dependency must conform to ‘UIStateRestoring’ protocol 
+(UIViewControllers automatically conform to this) and allows you to define a restoration class</p>
+<div class="highlight"><pre><span></span><span class="kr">optional</span> <span class="kd">var</span> <span class="nv">objectRestorationClass</span><span class="p">:</span> <span class="bp">UIObjectRestoration</span><span class="p">.</span><span class="kr">Type</span><span class="p">?</span> <span class="p">{</span> <span class="kr">get</span> <span class="p">}</span>
+</pre></div>
+
+
+<p>If you return nil from this method, UIKIT assumes the app startup code recreated 
+the dependency already and will be able to find it as you’ve registered it to a restoration id.</p>
+<p>If you do specify a restoration class, it needs to define the following static method:</p>
+<div class="highlight"><pre><span></span><span class="kd">static</span> <span class="kd">func</span> <span class="nf">object</span><span class="p">(</span><span class="n">withRestorationIdentifierPath</span> <span class="n">identifierComponents</span><span class="p">:</span> <span class="p">[</span><span class="nb">String</span><span class="p">],</span> <span class="n">coder</span><span class="p">:</span> <span class="bp">NSCoder</span><span class="p">)</span> <span class="p">-&gt;</span> <span class="bp">UIStateRestoring</span><span class="p">?</span>
+</pre></div>
+
+
+<p>It can return a reference to a global, init a new instance or return nil if no restoration is possible. </p>
+<h2>Restoring the Dependency as part of the Controller Decode Process</h2>
+<p>Now when you restore the view controllers state, any request to decode the 
+datasources’s restoration id will simply be passed the registered instance.
+Voila! You can now reconstruct the VC’s dependencies.</p>
+<div class="highlight"><pre><span></span><span class="kd">class</span> <span class="nc">controller</span> <span class="p">:</span> <span class="bp">UIViewController</span> <span class="p">{</span>
+    <span class="c1">// ...</span>
+
+    <span class="kr">override</span> <span class="kd">func</span> <span class="nf">decodeRestorableState</span><span class="p">(</span><span class="n">with</span><span class="p">:</span> <span class="bp">NSCoder</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kc">super</span><span class="p">.</span><span class="n">decodeRestorableState</span><span class="p">(</span><span class="n">with</span><span class="p">:</span> <span class="n">with</span><span class="p">)</span>
+        <span class="n">guard</span>
+            <span class="kd">let</span> <span class="nv">object</span> <span class="p">=</span> <span class="n">with</span><span class="p">.</span><span class="n">decodeObject</span><span class="p">(</span><span class="n">forKey</span><span class="p">:</span> <span class="s">&quot;DataSource&quot;</span><span class="p">),</span> <span class="c1">// Any </span>
+            <span class="kd">let</span> <span class="nv">dataSource</span> <span class="p">=</span> <span class="n">object</span> <span class="kc">as</span><span class="p">?</span> <span class="n">DateSourceKlass</span> 
+        <span class="k">else</span> <span class="p">{</span>
+            <span class="k">return</span>
+        <span class="p">}</span>
+        <span class="kc">self</span><span class="p">.</span><span class="n">dataSource</span> <span class="p">=</span> <span class="n">dataSource</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<p>The one draw back to this approach, as others have noted, is how it separates 
+Controller Restoration and Dependency Restoration into 2 distinct phases. 
+You’ve just lost your paddle if you’ve declared your dependencies as const.
+I think this hints at UIKits own opinion that controllers don’t actually own 
+their datasources and so should be declared weakly.</p>
+<h2>References</h2>
+<ul>
+<li><a href="https://developer.apple.com/videos/play/wwdc2013/222/">https://developer.apple.com/videos/play/wwdc2013/222/</a></li>
+</ul>
+    </div><!-- /.entry-content -->
+
+  </article>
+</section>
+        <section id="extras" class="body">
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+
+                            <li><a href="https://uk.linkedin.com/in/ashley-arthur-4a918635">Linkedin</a></li>
+                            <li><a href="https://github.com/ash30">Github</a></li>
+                            <li><a href="https://www.flickr.com/photos/ash30">Flickr</a></li>
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="http://coding.smashingmagazine.com/2009/08/04/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

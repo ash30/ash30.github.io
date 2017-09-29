@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <title>Ashley Arthur</title>
+        <link rel="stylesheet" href="./theme/css/main.css" />
+
+        <!--[if IE]>
+            <script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="./">Ashley Arthur </a></h1>
+                <nav><ul>
+                    <li><a href="archives.html">Archives</a></li>
+                    <li><a href="./category/tech.html">Tech</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+
+            <aside id="featured" class="body">
+                <article>
+                    <h1 class="entry-title"><a href="./hueinspired-an-ios-app-post-mortem.html">HueInspired - an iOS App Post Mortem</a></h1>
+<footer class="post-info">
+        <abbr class="published" title="2017-05-02T00:00:00+02:00">
+                Published: Tue 02 May 2017
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="./author/ashley-arthur.html">Ashley Arthur</a>
+        </address>
+<p>In <a href="./category/tech.html">Tech</a>.</p>
+<p>tags: <a href="./tag/swift.html">Swift</a> <a href="./tag/ios.html">iOS</a> </p>
+</footer><!-- /.post-info --><p>My current project is “HueInspired” - an iOS app for color palette generation from photos and I’m coming close to completing v1.0. Its been a blast and as a form of catharsis / chance to share what I learnt, I’m here to coherently ramble about the interesting points of the journey.</p>
+<h3>Swinject</h3>
+<p>In the initial prototype of the app I did my dependency injection manually through a combination of initialiser injection and pass through parameters. It worked but there was a lot of boiler plate that I had to maintain and it also conflated ownership as it required some classes to hold additional dependencies purely to pass it to constructors at runtime.</p>
+<p>Swinject definitely cleaned up the boilerplate, centralising construction in container callbacks and through its storyboard extension helped remove any hardcoding in the view controllers. I really liked the fact singletons became implementation detail of the class rather than the calling code, helping to keep things testable.</p>
+<p>The down side was I faced a lot of implicitly unwrapped optionals in said callbacks which makes me uneasy. It almost feels like you should include the Swinject container in your test coverage just to make sure all those assumptions hold, especially for parts of the object graph created dynamically at runtime. </p>
+<h3>CoreData</h3>
+<p>The main difficulty I had was ensuring reliable change notifications when working with FetchResultsController and multiple contexts. Mike Abdullah writes about it here: http://mikeabdullah.net/merging-saved-changes-betwe.html but in short: Any new objects that are merged into a context will only receive future update notifications if they are retained.</p>
+<p>Ultimately it meant merging in new objects was easy, but merging in edits for the same object was tricky. I generally came to the conclusion that any user interaction with managed objects should happen in the shared view context to ensure all FetchResultsControllers can see the change.</p>
+<hr />
+<p>Overall I’m still a fan of both frameworks just now slightly more aware of the trade offs involved. 
+Swinject is a pleasure to use and Core data, whilst not as charming has first party credentials that make it hard to ignore. </p>
+<p>Regardless, I can't wait to start the next project! </p>
+<h3>References</h3>
+<p><a href="https://github.com/ash30/HueInspired">HueInspired Github Repro</a></p>                </article>
+            </aside><!-- /#featured -->
+                <section id="content" class="body">
+                    <h1>Other articles</h1>
+                    <hr />
+                    <ol id="posts-list" class="hfeed">
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="./autolayout-margin-anchors-vs-dimension-anchors.html" rel="bookmark"
+                           title="Permalink to Autolayout Margin anchors vs Dimension anchors">Autolayout Margin anchors vs Dimension anchors</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2017-04-17T00:00:00+02:00">
+                Published: Mon 17 April 2017
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="./author/ashley-arthur.html">Ashley Arthur</a>
+        </address>
+<p>In <a href="./category/tech.html">Tech</a>.</p>
+<p>tags: <a href="./tag/swift.html">Swift</a> <a href="./tag/autolayout.html">AutoLayout</a> </p>
+</footer><!-- /.post-info -->                <p>Recently I was testing my custom table cells with dynamic type sizes and even though I didn't have any text present I noticed sub views changing sizes - intrigued, I investigated.</p>
+<p>My cell content was ridiculously simple, just one view that filled the whole parent content view, so what could ...</p>
+                <a class="readmore" href="./autolayout-margin-anchors-vs-dimension-anchors.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="./creating-class-level-properties-in-python.html" rel="bookmark"
+                           title="Permalink to Creating Class level Properties in Python">Creating Class level Properties in Python</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2017-04-02T00:00:00+02:00">
+                Published: Sun 02 April 2017
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="./author/ashley-arthur.html">Ashley Arthur</a>
+        </address>
+<p>In <a href="./category/tech.html">Tech</a>.</p>
+<p>tags: <a href="./tag/python.html">Python</a> </p>
+</footer><!-- /.post-info -->                <p>So what happens when you want a computed class property in python? </p>
+<p>Descriptors are invoked via the __getattribute__ so simply assigning a 
+descriptor to a class level attribute won't do. Instead you need to 
+create the class level property as a instance variable on the classes
+type object and ...</p>
+                <a class="readmore" href="./creating-class-level-properties-in-python.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="./use-unittests-to-explore-3rd-party-apis.html" rel="bookmark"
+                           title="Permalink to Use Unittests to Explore 3rd Party APIs">Use Unittests to Explore 3rd Party APIs</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2017-03-10T00:00:00+01:00">
+                Published: Fri 10 March 2017
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="./author/ashley-arthur.html">Ashley Arthur</a>
+        </address>
+<p>In <a href="./category/tech.html">Tech</a>.</p>
+<p>tags: <a href="./tag/python.html">Python</a> </p>
+</footer><!-- /.post-info -->                <p>One of the ideas I've adopted recently is to use unittests to assert the contract between you and a 3rd party API.
+It's pretty normal to explore api usage in the REPL but by writing it formally as a series of tests you can record
+your findings and ...</p>
+                <a class="readmore" href="./use-unittests-to-explore-3rd-party-apis.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="./restoring-viewcontrollers-and-their-data-sources-wip.html" rel="bookmark"
+                           title="Permalink to Restoring ViewControllers and their Data sources (WIP)">Restoring ViewControllers and their Data sources (WIP)</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2016-11-25T00:00:00+01:00">
+                Published: Fri 25 November 2016
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="./author/ashley-arthur.html">Ashley Arthur</a>
+        </address>
+<p>In <a href="./category/tech.html">Tech</a>.</p>
+<p>tags: <a href="./tag/swift.html">Swift</a> <a href="./tag/ios.html">iOS</a> </p>
+</footer><!-- /.post-info -->                <p>The traditional flow for restoring view controllers in UIKit goes likes this:</p>
+<ol>
+<li>(Required) Assign restoration identifiers to the view controllers</li>
+<li>(Required) Tell iOS how to create or locate new view controller objects at launch time.</li>
+<li>(Optional) Encode current State for later restoration</li>
+</ol>
+<p>Recreating the hierarchy of view controllers is indeed ...</p>
+                <a class="readmore" href="./restoring-viewcontrollers-and-their-data-sources-wip.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="./note-to-unowned-self.html" rel="bookmark"
+                           title="Permalink to Note to Unowned Self">Note to Unowned Self</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2016-11-20T00:00:00+01:00">
+                Published: Sun 20 November 2016
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="./author/ashley-arthur.html">Ashley Arthur</a>
+        </address>
+<p>In <a href="./category/tech.html">Tech</a>.</p>
+<p>tags: <a href="./tag/swift.html">Swift</a> <a href="./tag/ios.html">iOS</a> </p>
+</footer><!-- /.post-info -->                <p>Its easy to think that the answer to all closure woes is to just declare self unowned - no more reference cycles for me!
+However this is a very easy way to crash! Been there, done that, never again. </p>
+<p>let me translate what 'unowned' means: </p>
+<blockquote>
+<p>I am not the owner of ...</p></blockquote>
+                <a class="readmore" href="./note-to-unowned-self.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="./python-bindings-for-targetprocess.html" rel="bookmark"
+                           title="Permalink to Python Bindings for TargetProcess">Python Bindings for TargetProcess</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2016-05-28T00:00:00+02:00">
+                Published: Sat 28 May 2016
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="./author/ashley-arthur.html">Ashley Arthur</a>
+        </address>
+<p>In <a href="./category/tech.html">Tech</a>.</p>
+<p>tags: <a href="./tag/python.html">Python</a> <a href="./tag/restapis.html">RestAPIs</a> </p>
+</footer><!-- /.post-info -->                <p>Where can you find them? In one of my side projects: <a href='https://github.com/ash30/tpapi'>tpapi</a> - an unoffical python client for TargetProcess. It takes care of interacting with the REST api and returns nice model objects
+for you to interact with. Some useful features worth mentioning:</p>
+<h3>Transparent Pagination of Resource Requests</h3>
+<p>Every collection of ...</p>
+                <a class="readmore" href="./python-bindings-for-targetprocess.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="./testing-mac-gatekeeper.html" rel="bookmark"
+                           title="Permalink to Testing Mac Gatekeeper">Testing Mac Gatekeeper</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2015-04-29T00:00:00+02:00">
+                Published: Wed 29 April 2015
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="./author/ashley-arthur.html">Ashley Arthur</a>
+        </address>
+<p>In <a href="./category/tech.html">Tech</a>.</p>
+<p>tags: <a href="./tag/testing.html">Testing</a> <a href="./tag/osx.html">OSX</a> </p>
+</footer><!-- /.post-info -->                <p>Gatekeeper on macOS guards against the execution and installation of applications from unknown sources.
+In order to pass this security check an application needs to be correctly signed which means its
+a good requirement to check before a release.</p>
+<p>The key gotcha to watch out for when testing is to ...</p>
+                <a class="readmore" href="./testing-mac-gatekeeper.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="./python-descriptor-notes.html" rel="bookmark"
+                           title="Permalink to Python Descriptor Notes">Python Descriptor Notes</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2014-03-11T00:00:00+01:00">
+                Published: Tue 11 March 2014
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="./author/ashley-arthur.html">Ashley Arthur</a>
+        </address>
+<p>In <a href="./category/tech.html">Tech</a>.</p>
+<p>tags: <a href="./tag/python.html">Python</a> </p>
+</footer><!-- /.post-info -->                <ul>
+<li>Descriptors are any object that conform to the descriptor protocol __get__,__set__ and __del__. Properties are a common example</li>
+<li>Descriptors are class level objects and you must use the obj reference passed to it in order to access the parent object.</li>
+<li>This is because the descriptor protocol methods are invoked ...</li></ul>
+                <a class="readmore" href="./python-descriptor-notes.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+                </ol><!-- /#posts-list -->
+                </section><!-- /#content -->
+        <section id="extras" class="body">
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+
+                            <li><a href="https://uk.linkedin.com/in/ashley-arthur-4a918635">Linkedin</a></li>
+                            <li><a href="https://github.com/ash30">Github</a></li>
+                            <li><a href="https://www.flickr.com/photos/ash30">Flickr</a></li>
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="http://coding.smashingmagazine.com/2009/08/04/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

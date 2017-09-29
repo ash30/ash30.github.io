@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <title>Ashley Arthur - Testing</title>
+        <link rel="stylesheet" href="../theme/css/main.css" />
+
+        <!--[if IE]>
+            <script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="../">Ashley Arthur </a></h1>
+                <nav><ul>
+                    <li><a href="archives.html">Archives</a></li>
+                    <li><a href="../category/tech.html">Tech</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+
+            <aside id="featured" class="body">
+                <article>
+                    <h1 class="entry-title"><a href="../testing-mac-gatekeeper.html">Testing Mac Gatekeeper</a></h1>
+<footer class="post-info">
+        <abbr class="published" title="2015-04-29T00:00:00+02:00">
+                Published: Wed 29 April 2015
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="../author/ashley-arthur.html">Ashley Arthur</a>
+        </address>
+<p>In <a href="../category/tech.html">Tech</a>.</p>
+<p>tags: <a href="../tag/testing.html">Testing</a> <a href="../tag/osx.html">OSX</a> </p>
+</footer><!-- /.post-info --><p>Gatekeeper on macOS guards against the execution and installation of applications from unknown sources.
+In order to pass this security check an application needs to be correctly signed which means its
+a good requirement to check before a release.</p>
+<p>The key gotcha to watch out for when testing is to ensure the executable has been quarantined.
+By that I mean it has the ''com.apple.quarantine'' extended attribute present as Gatekeeper 
+is triggered specifically at the first time you execute or install a quarantined file.</p>
+<p>To verify the existence of the quarantine flag, you can show 'ls' output in terminal and look
+for the '@' at the end of the permission fields. Better yet you can use the 'xattr' command to
+show any extended attributes that exist on a file.</p>
+<div class="highlight"><pre><span></span>$ xattr /path/to/file
+
+com.apple.quarantine
+</pre></div>
+
+
+<p>A programatic method to verify if the application's signature will pass gate keeper is to run the 'spctl' command.</p>
+<div class="highlight"><pre><span></span>spctl --assess --type install ./path/to/file
+</pre></div>
+
+
+<p>Spctl will exit zero on success or return one if anything failed.</p>
+<p>Additionally you can check the actual signature use 'pkgutil' for futher details.</p>
+<div class="highlight"><pre><span></span>pkgutil --check-signature ./path/to/file
+</pre></div>                </article>
+            </aside><!-- /#featured -->
+        <section id="extras" class="body">
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+
+                            <li><a href="https://uk.linkedin.com/in/ashley-arthur-4a918635">Linkedin</a></li>
+                            <li><a href="https://github.com/ash30">Github</a></li>
+                            <li><a href="https://www.flickr.com/photos/ash30">Flickr</a></li>
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="http://coding.smashingmagazine.com/2009/08/04/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>

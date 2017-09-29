@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <title>Ashley Arthur - Python</title>
+        <link rel="stylesheet" href="../theme/css/main.css" />
+
+        <!--[if IE]>
+            <script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="../">Ashley Arthur </a></h1>
+                <nav><ul>
+                    <li><a href="archives.html">Archives</a></li>
+                    <li><a href="../category/tech.html">Tech</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+
+            <aside id="featured" class="body">
+                <article>
+                    <h1 class="entry-title"><a href="../creating-class-level-properties-in-python.html">Creating Class level Properties in Python</a></h1>
+<footer class="post-info">
+        <abbr class="published" title="2017-04-02T00:00:00+02:00">
+                Published: Sun 02 April 2017
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="../author/ashley-arthur.html">Ashley Arthur</a>
+        </address>
+<p>In <a href="../category/tech.html">Tech</a>.</p>
+<p>tags: <a href="../tag/python.html">Python</a> </p>
+</footer><!-- /.post-info --><p>So what happens when you want a computed class property in python? </p>
+<p>Descriptors are invoked via the __getattribute__ so simply assigning a 
+descriptor to a class level attribute won't do. Instead you need to 
+create the class level property as a instance variable on the classes
+type object and rely on the fact attribute look up will eventually
+look there via the base classes __class__ attribute.</p>
+<script src="https://gist.github.com/ash30/08ab5a96d7cfb8d5c8fad58ffea93970.js"></script>
+
+<p>Obligatory meta class warning: you better be sure you really need todo this :P </p>
+<h2>References</h2>
+<p>http://www.cafepy.com/article/python_attributes_and_methods/python_attributes_and_methods.pdf</p>                </article>
+            </aside><!-- /#featured -->
+                <section id="content" class="body">
+                    <h1>Other articles</h1>
+                    <hr />
+                    <ol id="posts-list" class="hfeed">
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="../use-unittests-to-explore-3rd-party-apis.html" rel="bookmark"
+                           title="Permalink to Use Unittests to Explore 3rd Party APIs">Use Unittests to Explore 3rd Party APIs</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2017-03-10T00:00:00+01:00">
+                Published: Fri 10 March 2017
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="../author/ashley-arthur.html">Ashley Arthur</a>
+        </address>
+<p>In <a href="../category/tech.html">Tech</a>.</p>
+<p>tags: <a href="../tag/python.html">Python</a> </p>
+</footer><!-- /.post-info -->                <p>One of the ideas I've adopted recently is to use unittests to assert the contract between you and a 3rd party API.
+It's pretty normal to explore api usage in the REPL but by writing it formally as a series of tests you can record
+your findings and ...</p>
+                <a class="readmore" href="../use-unittests-to-explore-3rd-party-apis.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="../python-bindings-for-targetprocess.html" rel="bookmark"
+                           title="Permalink to Python Bindings for TargetProcess">Python Bindings for TargetProcess</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2016-05-28T00:00:00+02:00">
+                Published: Sat 28 May 2016
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="../author/ashley-arthur.html">Ashley Arthur</a>
+        </address>
+<p>In <a href="../category/tech.html">Tech</a>.</p>
+<p>tags: <a href="../tag/python.html">Python</a> <a href="../tag/restapis.html">RestAPIs</a> </p>
+</footer><!-- /.post-info -->                <p>Where can you find them? In one of my side projects: <a href='https://github.com/ash30/tpapi'>tpapi</a> - an unoffical python client for TargetProcess. It takes care of interacting with the REST api and returns nice model objects
+for you to interact with. Some useful features worth mentioning:</p>
+<h3>Transparent Pagination of Resource Requests</h3>
+<p>Every collection of ...</p>
+                <a class="readmore" href="../python-bindings-for-targetprocess.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="../python-descriptor-notes.html" rel="bookmark"
+                           title="Permalink to Python Descriptor Notes">Python Descriptor Notes</a></h1>
+                </header>
+
+                <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2014-03-11T00:00:00+01:00">
+                Published: Tue 11 March 2014
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="../author/ashley-arthur.html">Ashley Arthur</a>
+        </address>
+<p>In <a href="../category/tech.html">Tech</a>.</p>
+<p>tags: <a href="../tag/python.html">Python</a> </p>
+</footer><!-- /.post-info -->                <ul>
+<li>Descriptors are any object that conform to the descriptor protocol __get__,__set__ and __del__. Properties are a common example</li>
+<li>Descriptors are class level objects and you must use the obj reference passed to it in order to access the parent object.</li>
+<li>This is because the descriptor protocol methods are invoked ...</li></ul>
+                <a class="readmore" href="../python-descriptor-notes.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+                </ol><!-- /#posts-list -->
+                </section><!-- /#content -->
+        <section id="extras" class="body">
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+
+                            <li><a href="https://uk.linkedin.com/in/ashley-arthur-4a918635">Linkedin</a></li>
+                            <li><a href="https://github.com/ash30">Github</a></li>
+                            <li><a href="https://www.flickr.com/photos/ash30">Flickr</a></li>
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="http://coding.smashingmagazine.com/2009/08/04/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>
