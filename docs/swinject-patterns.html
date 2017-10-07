@@ -1,28 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <title>Ashley Arthur | articles tagged "Swift"</title>
-    <link rel="shortcut icon" type="image/png" href="../favicon.png">
-    <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico">
+        <meta charset="utf-8" />
+    <title>Ashley Arthur | Swinject Patterns</title>
+    <link rel="shortcut icon" type="image/png" href="./favicon.png">
+    <link rel="shortcut icon" type="image/x-icon" href="./favicon.ico">
     <link href="http://ashleyarthur.co.uk/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Ashley Arthur Full Atom Feed" />
-    <link rel="stylesheet" href="../theme/css/screen.css" type="text/css" />
-    <link rel="stylesheet" href="../theme/css/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../theme/css/print.css" type="text/css" media="print" />
+    <link rel="stylesheet" href="./theme/css/screen.css" type="text/css" />
+    <link rel="stylesheet" href="./theme/css/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="./theme/css/print.css" type="text/css" media="print" />
     <meta name="generator" content="Pelican" />
+
+    <meta name="keywords" content="Swift,iOS,Swinject" />
 </head>
 <body>
     <header>
         <nav>
             <ul>
-                <li class="ephemeral selected"><a href="../tag/swift.html">Swift</a></li>
-                <li><a href="..">Home</a></li>
+                <li><a href=".">Home</a></li>
                 <li><a href="archives.html">Archives</a></li>
                 <li><a href="https://github.com/ash30">Github</a></li>
             </ul>
         </nav>
         <div class="header_box">
-            <h1><a href="..">Ashley Arthur</a></h1>
+            <h1><a href=".">Ashley Arthur</a></h1>
         </div>
     </header>
     <div id="wrapper">
@@ -30,7 +31,7 @@
 
             <article class="post">
                 <h2 class="title">
-                    <a href="../swinject-patterns.html" rel="bookmark" title="Permanent Link to &quot;Swinject Patterns&quot;">Swinject Patterns</a>
+                    <a href="./swinject-patterns.html" rel="bookmark" title="Permanent Link to &quot;Swinject Patterns&quot;">Swinject Patterns</a>
                 </h2>
 
                 <p>Swinject is a dependency injection framework for Swift which I've been using in some of my side projects recently. 
@@ -186,129 +187,14 @@ between different features. Here's a non exhaustive list of some of benefits I'v
                 <div class="clear"></div>
 
                 <div class="info">
-                    <a href="../swinject-patterns.html">posted at 00:00</a>
-                    &nbsp;&middot;&nbsp;<a href="../category/tech.html" rel="tag">Tech</a>
+                    <a href="./swinject-patterns.html">posted at 00:00</a>
+                    &nbsp;&middot;&nbsp;<a href="./category/tech.html" rel="tag">Tech</a>
                     &nbsp;&middot;
-                    &nbsp;<a href="../tag/swift.html" class="tags selected">Swift</a>
-                    &nbsp;<a href="../tag/ios.html" class="tags">iOS</a>
-                    &nbsp;<a href="../tag/swinject.html" class="tags">Swinject</a>
-                </div>
-            </article>            <h4 class="date">Apr 17, 2017</h4>
-
-            <article class="post">
-                <h2 class="title">
-                    <a href="../autolayout-margin-anchors-vs-dimension-anchors.html" rel="bookmark" title="Permanent Link to &quot;Autolayout Margin anchors vs Dimension anchors&quot;">Autolayout Margin anchors vs Dimension anchors</a>
-                </h2>
-
-                <p>Recently I was testing my custom table cells with dynamic type sizes and even though I didn't have any text present I noticed sub views changing sizes - intrigued, I investigated.</p>
-<p>My cell content was ridiculously simple, just one view that filled the whole parent content view, so what could be going wrong? It turns out it was auto layout related.
-When Initially designing the layout I thought of two ways of creating the layout: match the height, width and centres of the parent view OR match horizontal and vertical anchors.</p>
-<div class="highlight"><pre><span></span><span class="kd">let</span> <span class="nv">constraints</span> <span class="p">=</span> <span class="p">[</span>
-<span class="n">view</span><span class="p">.</span><span class="n">centerXAnchor</span><span class="p">.</span><span class="n">constraint</span><span class="p">(</span><span class="n">equalTo</span><span class="p">:</span> <span class="n">superview</span><span class="p">.</span><span class="n">layoutMarginsGuide</span><span class="p">.</span><span class="n">centerXAnchor</span><span class="p">),</span>
-<span class="n">view</span><span class="p">.</span><span class="n">centerYAnchor</span><span class="p">.</span><span class="n">constraint</span><span class="p">(</span><span class="n">equalTo</span><span class="p">:</span> <span class="n">superview</span><span class="p">.</span><span class="n">layoutMarginsGuide</span><span class="p">.</span><span class="n">centerYAnchor</span><span class="p">),</span>
-<span class="n">view</span><span class="p">.</span><span class="n">heightAnchor</span><span class="p">.</span><span class="n">constraint</span><span class="p">(</span><span class="n">equalTo</span><span class="p">:</span> <span class="n">superview</span><span class="p">.</span><span class="n">heightAnchor</span><span class="p">)</span>
-<span class="n">view</span><span class="p">.</span><span class="n">widthAnchor</span><span class="p">.</span><span class="n">constraint</span><span class="p">(</span><span class="n">equalTo</span><span class="p">:</span> <span class="n">superview</span><span class="p">.</span><span class="n">widthAnchor</span><span class="p">)</span>
-<span class="p">]</span>
-
-<span class="kd">let</span> <span class="nv">altConstraints</span> <span class="p">=</span> <span class="p">[</span>
-<span class="n">stackView</span><span class="p">.</span><span class="n">leadingAnchor</span><span class="p">.</span><span class="n">constraint</span><span class="p">(</span><span class="n">equalTo</span><span class="p">:</span> <span class="n">superview</span><span class="p">.</span><span class="n">layoutMarginsGuide</span><span class="p">.</span><span class="n">leadingAnchor</span><span class="p">),</span>
-<span class="n">stackView</span><span class="p">.</span><span class="n">trailingAnchor</span><span class="p">.</span><span class="n">constraint</span><span class="p">(</span><span class="n">equalTo</span><span class="p">:</span><span class="n">superview</span><span class="p">.</span><span class="n">layoutMarginsGuide</span><span class="p">.</span><span class="n">trailingAnchor</span><span class="p">),</span>
-<span class="n">stackView</span><span class="p">.</span><span class="n">topAnchor</span><span class="p">.</span><span class="n">constraint</span><span class="p">(</span><span class="n">equalTo</span><span class="p">:</span> <span class="n">superview</span><span class="p">.</span><span class="n">layoutMarginsGuide</span><span class="p">.</span><span class="n">topAnchor</span><span class="p">),</span>
-<span class="n">stackView</span><span class="p">.</span><span class="n">bottomAnchor</span><span class="p">.</span><span class="n">constraint</span><span class="p">(</span><span class="n">equalTo</span><span class="p">:</span> <span class="n">superview</span><span class="p">.</span><span class="n">layoutMarginsGuide</span><span class="p">.</span><span class="n">bottomAnchor</span><span class="p">),</span>
-<span class="p">]</span>
-</pre></div>
-
-
-<p>There is a difference though, and it's because I had opted to constrain anchors to the the margin guides. These are actually slightly offset from the edge by UIEdgeInsets and these change based on dynamic type sizes. I believe this is because table cells have the property
-<code>self.contentView.preservesSuperviewLayoutMargins</code> which means table view margin changes are inherited by the cell.</p>
-<p>Ultimately this was a case of view hierarchies and layout constraints can appear the same to the user but there can be subtle differences when interacting with other subsystems.</p>
-<p>On a simpler level, don't overlook your layout margins! </p>
-                <div class="clear"></div>
-
-                <div class="info">
-                    <a href="../autolayout-margin-anchors-vs-dimension-anchors.html">posted at 00:00</a>
-                    &nbsp;&middot;&nbsp;<a href="../category/tech.html" rel="tag">Tech</a>
-                    &nbsp;&middot;
-                    &nbsp;<a href="../tag/swift.html" class="tags selected">Swift</a>
-                    &nbsp;<a href="../tag/autolayout.html" class="tags">AutoLayout</a>
-                </div>
-            </article>            <h4 class="date">Nov 25, 2016</h4>
-
-            <article class="post">
-                <h2 class="title">
-                    <a href="../restoring-viewcontrollers-and-their-data-sources.html" rel="bookmark" title="Permanent Link to &quot;Restoring ViewControllers and their Data sources&quot;">Restoring ViewControllers and their Data sources</a>
-                </h2>
-
-                <p>The traditional flow for restoring view controllers in UIKit goes likes this:</p>
-<ol>
-<li>(Required) Assign restoration identifiers to the view controllers</li>
-<li>(Required) Tell iOS how to create or locate new view controller objects at launch time.</li>
-<li>(Optional) Encode current State for later restoration</li>
-</ol>
-<p>Recreating the hierarchy of view controllers is indeed easy and mostly automated but a lot of the articles out there gloss over how to restore their dependencies (hint: Grabbing references to singletons in the VC’s decodeRestorableState method is not the correct answer!)</p>
-<p>Normally you pass dependencies like a baton between controllers. When restoring a controller, the segue isn’t called and you get an ‘empty’ controller and its up to you to restore the dependencies. It turns out the data source can adopt the same state restoring protocol as the view controller and come along for the ride.  </p>
-<h2>Assign restoration ids for dependencies</h2>
-<p>Normally as apart of the app launch you’ll have some code to initialise backing data sources for your view controllers. As a small extension to this routine, we also now have to give them an ID so that the VC’s can indirectly reference them on app restore.</p>
-<p>The app delegate method <strong>willFinishLaunchingWithOptions</strong> is called after bootstrapping but before the restoration process so is a good place to register objects. </p>
-<script src="https://gist.github.com/ash30/39d74d475fa54541515a5298237b8fc2.js"></script>
-
-<h2>Tell iOS how to create or locate the dependency</h2>
-<p>Any registered dependency must conform to ‘UIStateRestoring’ protocol (UIViewControllers automatically conform to this) and allows you to define a restoration class</p>
-<div class="highlight"><pre><span></span><span class="kr">optional</span> <span class="kd">var</span> <span class="nv">objectRestorationClass</span><span class="p">:</span> <span class="bp">UIObjectRestoration</span><span class="p">.</span><span class="kr">Type</span><span class="p">?</span> <span class="p">{</span> <span class="kr">get</span> <span class="p">}</span>
-</pre></div>
-
-
-<p>If you return nil from this method, UIKIT assumes the app startup code recreated the dependency already and will be able to find it as you’ve registered it to a restoration id.</p>
-<p>If you do specify a restoration class, it needs to define the following static method:</p>
-<div class="highlight"><pre><span></span><span class="kd">static</span> <span class="kd">func</span> <span class="nf">object</span><span class="p">(</span><span class="n">withRestorationIdentifierPath</span> <span class="n">identifierComponents</span><span class="p">:</span> <span class="p">[</span><span class="nb">String</span><span class="p">],</span> <span class="n">coder</span><span class="p">:</span> <span class="bp">NSCoder</span><span class="p">)</span> <span class="p">-&gt;</span> <span class="bp">UIStateRestoring</span><span class="p">?</span>
-</pre></div>
-
-
-<p>It can return a reference to a global, init a new instance or return nil if no restoration is possible. </p>
-<h2>Restoring the Dependency as part of the Controller Decode Process</h2>
-<p>Now when you restore the view controllers state, any request to decode the datasources’s restoration id will simply be passed the registered instance. Voila! You can now reconstruct the VC’s dependencies.</p>
-<script src="https://gist.github.com/ash30/62733c8e8139b0b1e67c3ab615a59e7c.js"></script>
-
-<p>The one draw back to this approach, as others have noted, is how it separates Controller Restoration and Dependency Restoration into two distinct phases. You’ve just lost your paddle if you’ve declared your dependencies as const. I think this hints at UIKits own opinion that controllers don’t actually own their datasources and so should be declared weakly.</p>
-<h2>References</h2>
-<ul>
-<li><a href="https://developer.apple.com/videos/play/wwdc2013/222/">https://developer.apple.com/videos/play/wwdc2013/222/</a></li>
-</ul>
-                <div class="clear"></div>
-
-                <div class="info">
-                    <a href="../restoring-viewcontrollers-and-their-data-sources.html">posted at 00:00</a>
-                    &nbsp;&middot;&nbsp;<a href="../category/tech.html" rel="tag">Tech</a>
-                    &nbsp;&middot;
-                    &nbsp;<a href="../tag/swift.html" class="tags selected">Swift</a>
-                    &nbsp;<a href="../tag/ios.html" class="tags">iOS</a>
-                </div>
-            </article>            <h4 class="date">Nov 20, 2016</h4>
-
-            <article class="post">
-                <h2 class="title">
-                    <a href="../note-to-unowned-self.html" rel="bookmark" title="Permanent Link to &quot;Note to Unowned Self&quot;">Note to Unowned Self</a>
-                </h2>
-
-                <p>Its easy to think that the answer to all closure woes is to just declare self unowned - no more reference cycles for me!
-However this is a very easy way to crash! Been there, done that, never again. </p>
-<p>let me translate what 'unowned' means: </p>
-<blockquote>
-<p>I am not the owner of this reference but I am <strong>100%</strong> sure it will exist when I need it.</p>
-</blockquote>
-<p>Said like that, you can see thats a pretty sizeable assumption! </p>
-<p>A Weak reference, most of the time, will be a better bet because it makes you deal with possiblity of nil. </p>
-                <div class="clear"></div>
-
-                <div class="info">
-                    <a href="../note-to-unowned-self.html">posted at 00:00</a>
-                    &nbsp;&middot;&nbsp;<a href="../category/tech.html" rel="tag">Tech</a>
-                    &nbsp;&middot;
-                    &nbsp;<a href="../tag/swift.html" class="tags selected">Swift</a>
-                    &nbsp;<a href="../tag/ios.html" class="tags">iOS</a>
+                    &nbsp;<a href="./tag/swift.html" class="tags">Swift</a>
+                    &nbsp;<a href="./tag/ios.html" class="tags">iOS</a>
+                    &nbsp;<a href="./tag/swinject.html" class="tags">Swinject</a>
                 </div>
             </article>
-
             <div class="clear"></div>
             <footer>
                 <p>
@@ -316,7 +202,7 @@ However this is a very easy way to crash! Been there, done that, never again. </
                 &middot;
                 Powered by <a href="http://getpelican.com">Pelican</a>
                 &middot;
-                <a href="../feeds/all.atom.xml" rel="alternate">Atom Feed</a>
+                <a href="./feeds/all.atom.xml" rel="alternate">Atom Feed</a>
             </footer>
         </div>
         <div class="clear"></div>

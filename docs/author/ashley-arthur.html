@@ -27,7 +27,174 @@
         </div>
     </header>
     <div id="wrapper">
-        <div id="content">            <h4 class="date">Apr 17, 2017</h4>
+        <div id="content">            <h4 class="date">Aug 08, 2017</h4>
+
+            <article class="post">
+                <h2 class="title">
+                    <a href="../swinject-patterns.html" rel="bookmark" title="Permanent Link to &quot;Swinject Patterns&quot;">Swinject Patterns</a>
+                </h2>
+
+                <p>Swinject is a dependency injection framework for Swift which I've been using in some of my side projects recently. 
+Having ran the app dev gauntlet with it, I've seen some nice patterns emerge that simplify setup code and promotes loose coupling
+between different features. Here's a non exhaustive list of some of benefits I've seen in my code.</p>
+<h2>Encapsulating new feature setup with Assemblers</h2>
+<p>For most features or area of functionality, we create a group of related entities that work together. For example implementing a new ViewController may require new delegate object as well. </p>
+<div class="highlight"><pre><span></span><span class="kd">class</span> <span class="nc">Foo</span><span class="p">:</span> <span class="n">ViewController</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nv">weak</span> <span class="n">delegate</span><span class="p">:</span> <span class="n">NewDelegateProtocol</span><span class="p">?</span>
+
+    <span class="c1">// ....</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<p>To integrate this new vc, the existing code will need to instantiate the delegate and the data controller. This leaks implementation details into the rest of the system. Time for Assemblers! Here's what the protocol looks like:</p>
+<div class="highlight"><pre><span></span><span class="kd">protocol</span> <span class="nc">Assembly</span> <span class="p">{</span>
+    <span class="kd">public</span> <span class="kd">func</span> <span class="nf">assemble</span><span class="p">(</span><span class="n">container</span><span class="p">:</span> <span class="n">Swinject</span><span class="p">.</span><span class="n">Container</span><span class="p">)</span>
+    <span class="kd">public</span> <span class="kd">func</span> <span class="nf">loaded</span><span class="p">(</span><span class="n">resolver</span><span class="p">:</span> <span class="n">Resolver</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<p>And here's a simple implementation for our Foo View Controller</p>
+<div class="highlight"><pre><span></span><span class="kd">class</span> <span class="nc">FooAssembler</span><span class="p">:</span> <span class="n">Assembly</span> <span class="p">{</span>
+
+    <span class="kd">func</span> <span class="nf">assemble</span><span class="p">(</span><span class="n">container</span><span class="p">:</span> <span class="n">Container</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">container</span><span class="p">.</span><span class="n">register</span><span class="p">(</span><span class="n">NewDelegateProtocol</span><span class="p">.</span><span class="kc">self</span><span class="p">)</span> <span class="p">{</span> <span class="n">r</span> <span class="k">in</span>
+            <span class="k">return</span> <span class="n">NewDelegate</span><span class="p">()</span>
+        <span class="p">}</span>
+
+        <span class="n">container</span><span class="p">.</span><span class="n">register</span><span class="p">(</span><span class="n">Foo</span><span class="p">.</span><span class="kc">self</span><span class="p">)</span> <span class="p">{</span> <span class="n">r</span> <span class="k">in</span>
+            <span class="kd">let</span> <span class="nv">vc</span> <span class="p">=</span> <span class="n">Foo</span><span class="p">()</span>
+            <span class="n">vc</span><span class="p">.</span><span class="n">delegate</span> <span class="p">=</span> <span class="n">container</span><span class="p">.</span><span class="n">resolve</span><span class="p">(</span><span class="n">NewDelegateProtocol</span><span class="p">.</span><span class="kc">self</span><span class="p">)</span><span class="o">!</span> 
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<p>An Assembler is a protocol which defines a single function <em>Assemble</em>. The Assembler's responsibility is to setup a container by registering factory callbacks. Why is this useful? We can augment existing containers with knowledge of Foo's setup requirements without leaking it to calling code, all they need to do is this:</p>
+<div class="highlight"><pre><span></span><span class="n">mainContainer</span><span class="p">.</span><span class="n">resolve</span><span class="p">(</span><span class="n">Foo</span><span class="p">.</span><span class="kc">self</span><span class="p">)</span><span class="o">!</span>
+</pre></div>
+
+
+<p>Hoorah for encapsulation! Knowledge of the object graph is no longer required. As an added bonus, with features providing their own assemblers we can start conditionally including them, a step in the direction of feature flags.</p>
+<h2>Private Containers</h2>
+<p>Sometimes we want the feature to register factories but not have all of them exposed to anyone who includes the assembler. Going back to our example, maybe we don't want people accidentally instantiating  our <code>NewDelegate</code>? We can use private internal containers:</p>
+<div class="highlight"><pre><span></span><span class="kd">class</span> <span class="nc">FooAssembler</span><span class="p">:</span> <span class="n">Assembly</span> <span class="p">{</span>
+    <span class="kd">private</span> <span class="kd">let</span> <span class="nv">internalContainer</span> <span class="p">=</span> <span class="p">{</span> 
+        <span class="kd">let</span> <span class="nv">container</span> <span class="p">=</span> <span class="n">Container</span><span class="p">()</span>
+        <span class="n">container</span><span class="p">.</span><span class="n">register</span><span class="p">(</span><span class="n">NewDelegateProtocol</span><span class="p">.</span><span class="kc">self</span><span class="p">)</span> <span class="p">{</span> <span class="n">r</span> <span class="k">in</span>
+            <span class="k">return</span> <span class="n">NewDelegate</span><span class="p">()</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">container</span>
+    <span class="p">}()</span>
+
+    <span class="kd">func</span> <span class="nf">assemble</span><span class="p">(</span><span class="n">container</span><span class="p">:</span> <span class="n">Container</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">container</span><span class="p">.</span><span class="n">register</span><span class="p">(</span><span class="n">Foo</span><span class="p">.</span><span class="kc">self</span><span class="p">)</span> <span class="p">{</span> <span class="n">r</span> <span class="k">in</span>
+            <span class="kd">let</span> <span class="nv">vc</span> <span class="p">=</span> <span class="n">Foo</span><span class="p">()</span>
+            <span class="n">vc</span><span class="p">.</span><span class="n">delegate</span> <span class="p">=</span> <span class="n">internalContainer</span><span class="p">.</span><span class="n">resolve</span><span class="p">(</span><span class="n">NewDelegateProtocol</span><span class="p">.</span><span class="kc">self</span><span class="p">)</span><span class="o">!</span> 
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+
+
+<p>Here only <code>Foo</code> will be registered in the target container.</p>
+<h2>Containers as Abstract Factories</h2>
+<p>Obvious but worth mentioning: registering protocols instead of concrete classes in the container is an easy way to implement an abstract factory. Containers centralise the definition of the specified concrete class and allow you to easily pass around opaque references to objects.</p>
+<h2>Rules for unwrapping resolve calls</h2>
+<p>As I rely on other assemblers registering factories, we cannot always be sure if the resolve call will be fulfilled. Hence I try and stick to the following rules</p>
+<ol>
+<li>If the current assembler registers the factory then you can safely force unwrap</li>
+<li>If Type is specified in Core (i.e. never conditionally included), we can generally force unwrap</li>
+<li>Else it should be left as optional</li>
+</ol>
+<h2>Creating components at runtime</h2>
+<p>Not all objects are constructed at startup, for example we may need to construct a view controller and present it based on a user interaction aka the master-detail pattern. Instead of hard coding the next view controller into the master vc, we can express it as dependency that can injected in as required. </p>
+<div class="highlight"><pre><span></span><span class="kd">typealias</span> <span class="n">ViewControllerFactory</span> <span class="p">=</span> <span class="p">()</span> <span class="p">-&gt;</span> <span class="n">ViewController</span><span class="p">?</span>
+
+<span class="kd">class</span> <span class="nc">Bar</span><span class="p">:</span> <span class="n">ViewController</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nv">nextVC</span><span class="p">:</span> <span class="n">ViewControllerFactory</span><span class="p">?</span>
+
+    <span class="c1">// ....</span>
+
+    <span class="kd">func</span> <span class="nf">showDetail</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">present</span><span class="p">(</span><span class="n">nextVC</span><span class="p">(),</span> <span class="n">animated</span><span class="p">:</span><span class="kc">true</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">class</span> <span class="nc">BarAssembler</span><span class="p">:</span> <span class="n">Assembly</span>
+    <span class="kd">func</span> <span class="nf">assemble</span><span class="p">(</span><span class="n">container</span><span class="p">:</span> <span class="n">Container</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">container</span><span class="p">.</span><span class="n">register</span><span class="p">(</span><span class="n">Bar</span><span class="p">.</span><span class="kc">self</span><span class="p">)</span> <span class="p">{</span> <span class="n">r</span> <span class="k">in</span>
+            <span class="kd">var</span> <span class="nv">vc</span> <span class="p">=</span> <span class="n">Bar</span><span class="p">()</span>
+            <span class="n">vc</span><span class="p">.</span><span class="n">factory</span> <span class="p">=</span> <span class="p">{</span> <span class="n">container</span><span class="p">.</span><span class="n">resolve</span><span class="p">(</span><span class="n">Spam</span><span class="p">.</span><span class="kc">self</span><span class="p">)</span> <span class="p">}</span>               
+            <span class="k">return</span> <span class="n">vc</span> 
+        <span class="p">}</span>
+    <span class="p">}</span>
+</pre></div>
+
+
+<p>Why does this matter? It decouples the master and detail vcs which allow for better modularity. We could easily add an alternative presented vc:</p>
+<div class="highlight"><pre><span></span><span class="kr">class</span> <span class="nx">BarAssembler</span>: <span class="kt">Assembly</span>
+    <span class="nx">func</span> <span class="nx">assemble</span><span class="p">(</span><span class="nx">container</span>: <span class="kt">Container</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">container</span><span class="p">.</span><span class="nx">register</span><span class="p">(</span><span class="nx">Bar</span><span class="p">.</span><span class="nx">self</span><span class="p">)</span> <span class="p">{</span> <span class="nx">r</span> <span class="k">in</span>
+            <span class="kd">var</span> <span class="nx">vc</span> <span class="o">=</span> <span class="nx">Bar</span><span class="p">()</span>
+            <span class="nx">vc</span><span class="p">.</span><span class="nx">factory</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">container</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">Spam</span><span class="p">.</span><span class="nx">self</span><span class="p">)</span> <span class="p">}</span>               
+            <span class="k">return</span> <span class="nx">vc</span> 
+        <span class="p">}</span>
+        <span class="nx">container</span><span class="p">.</span><span class="nx">register</span><span class="p">(</span><span class="nx">Bar</span><span class="p">.</span><span class="nx">self</span><span class="p">,</span> <span class="nx">named</span><span class="o">:</span><span class="s2">&quot;AlternativeDetail&quot;</span><span class="p">)</span> <span class="p">{</span> <span class="nx">r</span> <span class="k">in</span>
+            <span class="kd">var</span> <span class="nx">vc</span> <span class="o">=</span> <span class="nx">Bar</span><span class="p">()</span>
+            <span class="nx">vc</span><span class="p">.</span><span class="nx">factory</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">container</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">NewSpam</span><span class="p">.</span><span class="nx">self</span><span class="p">)</span> <span class="p">}</span>                
+            <span class="k">return</span> <span class="nx">vc</span> 
+        <span class="p">}</span>
+    <span class="p">}</span>
+</pre></div>
+
+
+<p>A/B Test anyone? Or maybe increased testability? As a side note I prefer this approach as apposed to having an object take the container as a dependency as it keeps your vc decoupled from swinject itself.</p>
+<p>Some of you maybe asking what about setting up the new view controller? That's easily taken care of:</p>
+<div class="highlight"><pre><span></span><span class="kd">typealias</span> <span class="n">ViewControllerFactory</span> <span class="p">=</span> <span class="p">(</span><span class="n">Model</span><span class="p">)</span> <span class="p">-&gt;</span> <span class="n">ViewController</span><span class="p">?</span>
+
+<span class="kd">class</span> <span class="nc">Bar</span><span class="p">:</span> <span class="n">ViewController</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nv">nextVC</span><span class="p">:</span> <span class="n">ViewControllerFactory</span><span class="p">?</span>
+
+    <span class="c1">// ....</span>
+
+    <span class="kd">func</span> <span class="nf">showDetail</span><span class="p">()</span> <span class="p">{</span>
+        <span class="c1">// ....</span>
+        <span class="n">present</span><span class="p">(</span><span class="n">nextVC</span><span class="p">(</span><span class="n">model</span><span class="p">),</span> <span class="n">animated</span><span class="p">:</span><span class="kc">true</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">class</span> <span class="nc">BarAssembler</span><span class="p">:</span> <span class="n">Assembly</span>
+    <span class="kd">func</span> <span class="nf">assemble</span><span class="p">(</span><span class="n">container</span><span class="p">:</span> <span class="n">Container</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">container</span><span class="p">.</span><span class="n">register</span><span class="p">(</span><span class="n">Bar</span><span class="p">.</span><span class="kc">self</span><span class="p">)</span> <span class="p">{</span> <span class="n">r</span> <span class="k">in</span>
+            <span class="kd">var</span> <span class="nv">vc</span> <span class="p">=</span> <span class="n">Bar</span><span class="p">()</span>
+            <span class="n">vc</span><span class="p">.</span><span class="n">factory</span> <span class="p">=</span> <span class="p">{</span> 
+                <span class="n">nextvc</span> <span class="p">=</span> <span class="n">container</span><span class="p">.</span><span class="n">resolve</span><span class="p">(</span><span class="n">Spam</span><span class="p">.</span><span class="kc">self</span><span class="p">)</span>
+                <span class="n">nextvc</span><span class="p">.</span><span class="n">data</span> <span class="p">=</span> <span class="nv">$0</span>
+                <span class="k">return</span> <span class="n">nextvc</span>
+             <span class="p">}</span>              
+            <span class="k">return</span> <span class="n">vc</span> 
+        <span class="p">}</span>
+    <span class="p">}</span>
+</pre></div>
+
+
+<p>This is very similar to the previous example but instead we now take in some input parameter to the ViewControllerFactory. What's great about this approach is within the callback we have knowledge of what concrete class we're setting up but returning to the outside world the more general ViewController class keeping things nice and opaque.</p>
+<h2>Is that all?</h2>
+<p>I'm still only scratching the surface of this great framework so I look forward to using it more over the coming projects. In my last: <a href="https://github.com/ash30/HueInspired">HueInspired</a> I saw great improvements in modularity which helped improve overall testability (disclaimer: I like a good unittest). All I can say is go forth and swinject!</p>
+                <div class="clear"></div>
+
+                <div class="info">
+                    <a href="../swinject-patterns.html">posted at 00:00</a>
+                    &nbsp;&middot;&nbsp;<a href="../category/tech.html" rel="tag">Tech</a>
+                    &nbsp;&middot;
+                    &nbsp;<a href="../tag/swift.html" class="tags">Swift</a>
+                    &nbsp;<a href="../tag/ios.html" class="tags">iOS</a>
+                    &nbsp;<a href="../tag/swinject.html" class="tags">Swinject</a>
+                </div>
+            </article>            <h4 class="date">Apr 17, 2017</h4>
 
             <article class="post">
                 <h2 class="title">
