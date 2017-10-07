@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Ashley Arthur - Tech</title><link href="http://ashleyarthur.co.uk/" rel="alternate"></link><link href="http://ashleyarthur.co.uk/feeds/tech.atom.xml" rel="self"></link><id>http://ashleyarthur.co.uk/</id><updated>2017-08-08T00:00:00+02:00</updated><entry><title>Swinject Patterns</title><link href="http://ashleyarthur.co.uk/swinject-patterns.html" rel="alternate"></link><published>2017-08-08T00:00:00+02:00</published><updated>2017-08-08T00:00:00+02:00</updated><author><name>Ashley Arthur</name></author><id>tag:ashleyarthur.co.uk,2017-08-08:/swinject-patterns.html</id><summary type="html">&lt;p&gt;Swinject is a dependency injection framework for Swift which I've been using in some of my side projects recently. 
+Having ran the app dev gauntlet with it, I've seen some nice patterns emerge that simplify setup code and promotes loose coupling
+between different features. Here's a non exhaustive list of …&lt;/p&gt;</summary><content type="html">&lt;p&gt;Swinject is a dependency injection framework for Swift which I've been using in some of my side projects recently. 
+Having ran the app dev gauntlet with it, I've seen some nice patterns emerge that simplify setup code and promotes loose coupling
+between different features. Here's a non exhaustive list of some of benefits I've seen in my code.&lt;/p&gt;
+&lt;h2&gt;Encapsulating new feature setup with Assemblers&lt;/h2&gt;
+&lt;p&gt;For most features or area of functionality, we create a group of related entities that work together. For example implementing a new ViewController may require new delegate object as well. &lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kd"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;Foo&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;ViewController&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nv"&gt;weak&lt;/span&gt; &lt;span class="n"&gt;delegate&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;NewDelegateProtocol&lt;/span&gt;&lt;span class="p"&gt;?&lt;/span&gt;
+
+    &lt;span class="c1"&gt;// ....&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;To integrate this new vc, the existing code will need to instantiate the delegate and the data controller. This leaks implementation details into the rest of the system. Time for Assemblers! Here's what the protocol looks like:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kd"&gt;protocol&lt;/span&gt; &lt;span class="nc"&gt;Assembly&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="kd"&gt;public&lt;/span&gt; &lt;span class="kd"&gt;func&lt;/span&gt; &lt;span class="nf"&gt;assemble&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;container&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;Swinject&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;Container&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="kd"&gt;public&lt;/span&gt; &lt;span class="kd"&gt;func&lt;/span&gt; &lt;span class="nf"&gt;loaded&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;resolver&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;Resolver&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;And here's a simple implementation for our Foo View Controller&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kd"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;FooAssembler&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;Assembly&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+
+    &lt;span class="kd"&gt;func&lt;/span&gt; &lt;span class="nf"&gt;assemble&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;container&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;Container&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="n"&gt;container&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;register&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;NewDelegateProtocol&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="kc"&gt;self&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="n"&gt;r&lt;/span&gt; &lt;span class="k"&gt;in&lt;/span&gt;
+            &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;NewDelegate&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+        &lt;span class="p"&gt;}&lt;/span&gt;
+
+        &lt;span class="n"&gt;container&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;register&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Foo&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="kc"&gt;self&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="n"&gt;r&lt;/span&gt; &lt;span class="k"&gt;in&lt;/span&gt;
+            &lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nv"&gt;vc&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Foo&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+            &lt;span class="n"&gt;vc&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;delegate&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="n"&gt;container&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;resolve&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;NewDelegateProtocol&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="kc"&gt;self&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;!&lt;/span&gt; 
+        &lt;span class="p"&gt;}&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;An Assembler is a protocol which defines a single function &lt;em&gt;Assemble&lt;/em&gt;. The Assembler's responsibility is to setup a container by registering factory callbacks. Why is this useful? We can augment existing containers with knowledge of Foo's setup requirements without leaking it to calling code, all they need to do is this:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="n"&gt;mainContainer&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;resolve&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Foo&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="kc"&gt;self&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;!&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Hoorah for encapsulation! Knowledge of the object graph is no longer required. As an added bonus, with features providing their own assemblers we can start conditionally including them, a step in the direction of feature flags.&lt;/p&gt;
+&lt;h2&gt;Private Containers&lt;/h2&gt;
+&lt;p&gt;Sometimes we want the feature to register factories but not have all of them exposed to anyone who includes the assembler. Going back to our example, maybe we don't want people accidentally instantiating  our &lt;code&gt;NewDelegate&lt;/code&gt;? We can use private internal containers:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kd"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;FooAssembler&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;Assembly&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="kd"&gt;private&lt;/span&gt; &lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nv"&gt;internalContainer&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt; 
+        &lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nv"&gt;container&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Container&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+        &lt;span class="n"&gt;container&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;register&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;NewDelegateProtocol&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="kc"&gt;self&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="n"&gt;r&lt;/span&gt; &lt;span class="k"&gt;in&lt;/span&gt;
+            &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;NewDelegate&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+        &lt;span class="p"&gt;}&lt;/span&gt;
+        &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;container&lt;/span&gt;
+    &lt;span class="p"&gt;}()&lt;/span&gt;
+
+    &lt;span class="kd"&gt;func&lt;/span&gt; &lt;span class="nf"&gt;assemble&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;container&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;Container&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="n"&gt;container&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;register&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Foo&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="kc"&gt;self&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="n"&gt;r&lt;/span&gt; &lt;span class="k"&gt;in&lt;/span&gt;
+            &lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nv"&gt;vc&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Foo&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+            &lt;span class="n"&gt;vc&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;delegate&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="n"&gt;internalContainer&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;resolve&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;NewDelegateProtocol&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="kc"&gt;self&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;!&lt;/span&gt; 
+        &lt;span class="p"&gt;}&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Here only &lt;code&gt;Foo&lt;/code&gt; will be registered in the target container.&lt;/p&gt;
+&lt;h2&gt;Containers as Abstract Factories&lt;/h2&gt;
+&lt;p&gt;Obvious but worth mentioning: registering protocols instead of concrete classes in the container is an easy way to implement an abstract factory. Containers centralise the definition of the specified concrete class and allow you to easily pass around opaque references to objects.&lt;/p&gt;
+&lt;h2&gt;Rules for unwrapping resolve calls&lt;/h2&gt;
+&lt;p&gt;As I rely on other assemblers registering factories, we cannot always be sure if the resolve call will be fulfilled. Hence I try and stick to the following rules&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;If the current assembler registers the factory then you can safely force unwrap&lt;/li&gt;
+&lt;li&gt;If Type is specified in Core (i.e. never conditionally included), we can generally force unwrap&lt;/li&gt;
+&lt;li&gt;Else it should be left as optional&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2&gt;Creating components at runtime&lt;/h2&gt;
+&lt;p&gt;Not all objects are constructed at startup, for example we may need to construct a view controller and present it based on a user interaction aka the master-detail pattern. Instead of hard coding the next view controller into the master vc, we can express it as dependency that can injected in as required. &lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kd"&gt;typealias&lt;/span&gt; &lt;span class="n"&gt;ViewControllerFactory&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;-&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;ViewController&lt;/span&gt;&lt;span class="p"&gt;?&lt;/span&gt;
+
+&lt;span class="kd"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;Bar&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;ViewController&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nv"&gt;nextVC&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;ViewControllerFactory&lt;/span&gt;&lt;span class="p"&gt;?&lt;/span&gt;
+
+    &lt;span class="c1"&gt;// ....&lt;/span&gt;
+
+    &lt;span class="kd"&gt;func&lt;/span&gt; &lt;span class="nf"&gt;showDetail&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="n"&gt;present&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;nextVC&lt;/span&gt;&lt;span class="p"&gt;(),&lt;/span&gt; &lt;span class="n"&gt;animated&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="kc"&gt;true&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+
+&lt;span class="kd"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;BarAssembler&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;Assembly&lt;/span&gt;
+    &lt;span class="kd"&gt;func&lt;/span&gt; &lt;span class="nf"&gt;assemble&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;container&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;Container&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="n"&gt;container&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;register&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Bar&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="kc"&gt;self&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="n"&gt;r&lt;/span&gt; &lt;span class="k"&gt;in&lt;/span&gt;
+            &lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nv"&gt;vc&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Bar&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+            &lt;span class="n"&gt;vc&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;factory&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="n"&gt;container&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;resolve&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Spam&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="kc"&gt;self&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;}&lt;/span&gt;               
+            &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;vc&lt;/span&gt; 
+        &lt;span class="p"&gt;}&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Why does this matter? It decouples the master and detail vcs which allow for better modularity. We could easily add an alternative presented vc:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kr"&gt;class&lt;/span&gt; &lt;span class="nx"&gt;BarAssembler&lt;/span&gt;: &lt;span class="kt"&gt;Assembly&lt;/span&gt;
+    &lt;span class="nx"&gt;func&lt;/span&gt; &lt;span class="nx"&gt;assemble&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;container&lt;/span&gt;: &lt;span class="kt"&gt;Container&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="nx"&gt;container&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;register&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;Bar&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;self&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="nx"&gt;r&lt;/span&gt; &lt;span class="k"&gt;in&lt;/span&gt;
+            &lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;vc&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;Bar&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+            &lt;span class="nx"&gt;vc&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;factory&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="nx"&gt;container&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;resolve&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;Spam&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;self&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;}&lt;/span&gt;               
+            &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="nx"&gt;vc&lt;/span&gt; 
+        &lt;span class="p"&gt;}&lt;/span&gt;
+        &lt;span class="nx"&gt;container&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;register&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;Bar&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;self&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="nx"&gt;named&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;&lt;span class="s2"&gt;&amp;quot;AlternativeDetail&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="nx"&gt;r&lt;/span&gt; &lt;span class="k"&gt;in&lt;/span&gt;
+            &lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nx"&gt;vc&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="nx"&gt;Bar&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+            &lt;span class="nx"&gt;vc&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;factory&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="nx"&gt;container&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;resolve&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nx"&gt;NewSpam&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="nx"&gt;self&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;}&lt;/span&gt;                
+            &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="nx"&gt;vc&lt;/span&gt; 
+        &lt;span class="p"&gt;}&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;A/B Test anyone? Or maybe increased testability? As a side note I prefer this approach as apposed to having an object take the container as a dependency as it keeps your vc decoupled from swinject itself.&lt;/p&gt;
+&lt;p&gt;Some of you maybe asking what about setting up the new view controller? That's easily taken care of:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kd"&gt;typealias&lt;/span&gt; &lt;span class="n"&gt;ViewControllerFactory&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Model&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;-&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;ViewController&lt;/span&gt;&lt;span class="p"&gt;?&lt;/span&gt;
+
+&lt;span class="kd"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;Bar&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;ViewController&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nv"&gt;nextVC&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;ViewControllerFactory&lt;/span&gt;&lt;span class="p"&gt;?&lt;/span&gt;
+
+    &lt;span class="c1"&gt;// ....&lt;/span&gt;
+
+    &lt;span class="kd"&gt;func&lt;/span&gt; &lt;span class="nf"&gt;showDetail&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="c1"&gt;// ....&lt;/span&gt;
+        &lt;span class="n"&gt;present&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;nextVC&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;model&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt; &lt;span class="n"&gt;animated&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="kc"&gt;true&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+
+&lt;span class="kd"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;BarAssembler&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;Assembly&lt;/span&gt;
+    &lt;span class="kd"&gt;func&lt;/span&gt; &lt;span class="nf"&gt;assemble&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;container&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;Container&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
+        &lt;span class="n"&gt;container&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;register&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Bar&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="kc"&gt;self&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="n"&gt;r&lt;/span&gt; &lt;span class="k"&gt;in&lt;/span&gt;
+            &lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nv"&gt;vc&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="n"&gt;Bar&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+            &lt;span class="n"&gt;vc&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;factory&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt; 
+                &lt;span class="n"&gt;nextvc&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="n"&gt;container&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;resolve&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Spam&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="kc"&gt;self&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+                &lt;span class="n"&gt;nextvc&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;data&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="nv"&gt;$0&lt;/span&gt;
+                &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;nextvc&lt;/span&gt;
+             &lt;span class="p"&gt;}&lt;/span&gt;              
+            &lt;span class="k"&gt;return&lt;/span&gt; &lt;span class="n"&gt;vc&lt;/span&gt; 
+        &lt;span class="p"&gt;}&lt;/span&gt;
+    &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;This is very similar to the previous example but instead we now take in some input parameter to the ViewControllerFactory. What's great about this approach is within the callback we have knowledge of what concrete class we're setting up but returning to the outside world the more general ViewController class keeping things nice and opaque.&lt;/p&gt;
+&lt;h2&gt;Is that all?&lt;/h2&gt;
+&lt;p&gt;I'm still only scratching the surface of this great framework so I look forward to using it more over the coming projects. In my last: &lt;a href="https://github.com/ash30/HueInspired"&gt;HueInspired&lt;/a&gt; I saw great improvements in modularity which helped improve overall testability (disclaimer: I like a good unittest). All I can say is go forth and swinject!&lt;/p&gt;</content><category term="Swift"></category><category term="iOS"></category><category term="Swinject"></category></entry><entry><title>Autolayout Margin anchors vs Dimension anchors</title><link href="http://ashleyarthur.co.uk/autolayout-margin-anchors-vs-dimension-anchors.html" rel="alternate"></link><published>2017-04-17T00:00:00+02:00</published><updated>2017-04-17T00:00:00+02:00</updated><author><name>Ashley Arthur</name></author><id>tag:ashleyarthur.co.uk,2017-04-17:/autolayout-margin-anchors-vs-dimension-anchors.html</id><summary type="html">&lt;p&gt;Recently I was testing my custom table cells with dynamic type sizes and even though I didn't have any text present I noticed sub views changing sizes - intrigued, I investigated.&lt;/p&gt;
+&lt;p&gt;My cell content was ridiculously simple, just one view that filled the whole parent content view, so what could be …&lt;/p&gt;</summary><content type="html">&lt;p&gt;Recently I was testing my custom table cells with dynamic type sizes and even though I didn't have any text present I noticed sub views changing sizes - intrigued, I investigated.&lt;/p&gt;
+&lt;p&gt;My cell content was ridiculously simple, just one view that filled the whole parent content view, so what could be going wrong? It turns out it was auto layout related.
+When Initially designing the layout I thought of two ways of creating the layout: match the height, width and centres of the parent view OR match horizontal and vertical anchors.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nv"&gt;constraints&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;
+&lt;span class="n"&gt;view&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;centerXAnchor&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;constraint&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;equalTo&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;superview&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;layoutMarginsGuide&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;centerXAnchor&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt;
+&lt;span class="n"&gt;view&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;centerYAnchor&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;constraint&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;equalTo&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;superview&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;layoutMarginsGuide&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;centerYAnchor&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt;
+&lt;span class="n"&gt;view&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;heightAnchor&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;constraint&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;equalTo&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;superview&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;heightAnchor&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="n"&gt;view&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;widthAnchor&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;constraint&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;equalTo&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;superview&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;widthAnchor&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="p"&gt;]&lt;/span&gt;
+
+&lt;span class="kd"&gt;let&lt;/span&gt; &lt;span class="nv"&gt;altConstraints&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;
+&lt;span class="n"&gt;stackView&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;leadingAnchor&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;constraint&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;equalTo&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;superview&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;layoutMarginsGuide&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;leadingAnchor&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt;
+&lt;span class="n"&gt;stackView&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;trailingAnchor&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;constraint&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;equalTo&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="n"&gt;superview&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;layoutMarginsGuide&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;trailingAnchor&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt;
+&lt;span class="n"&gt;stackView&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;topAnchor&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;constraint&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;equalTo&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;superview&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;layoutMarginsGuide&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;topAnchor&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt;
+&lt;span class="n"&gt;stackView&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;bottomAnchor&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;constraint&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;equalTo&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="n"&gt;superview&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;layoutMarginsGuide&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;bottomAnchor&lt;/span&gt;&lt;span class="p"&gt;),&lt;/span&gt;
+&lt;span class="p"&gt;]&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;There is a difference though, and it's because I had opted to constrain anchors to the the margin guides. These are actually slightly offset from the edge by UIEdgeInsets and these change based on dynamic type sizes. I believe this is because table cells have the property
+&lt;code&gt;self.contentView.preservesSuperviewLayoutMargins&lt;/code&gt; which means table view margin changes are inherited by the cell.&lt;/p&gt;
+&lt;p&gt;Ultimately this was a case of view hierarchies and layout constraints can appear the same to the user but there can be subtle differences when interacting with other subsystems.&lt;/p&gt;
+&lt;p&gt;On a simpler level, don't overlook your layout margins! &lt;/p&gt;</content><category term="Swift"></category><category term="AutoLayout"></category></entry><entry><title>Creating Class level Properties in Python</title><link href="http://ashleyarthur.co.uk/creating-class-level-properties-in-python.html" rel="alternate"></link><published>2017-04-02T00:00:00+02:00</published><updated>2017-04-02T00:00:00+02:00</updated><author><name>Ashley Arthur</name></author><id>tag:ashleyarthur.co.uk,2017-04-02:/creating-class-level-properties-in-python.html</id><summary type="html">&lt;p&gt;So what happens when you want a computed class property in python? &lt;/p&gt;
+&lt;p&gt;Descriptors are invoked via the &lt;em&gt;__getattribute__&lt;/em&gt; so simply assigning a descriptor to a class level attribute won't do. Instead you need to create the class level property as a instance variable on the classes type object and rely …&lt;/p&gt;</summary><content type="html">&lt;p&gt;So what happens when you want a computed class property in python? &lt;/p&gt;
+&lt;p&gt;Descriptors are invoked via the &lt;em&gt;__getattribute__&lt;/em&gt; so simply assigning a descriptor to a class level attribute won't do. Instead you need to create the class level property as a instance variable on the classes type object and rely on the fact attribute look up will eventually look there via the base classes &lt;em&gt;__class__&lt;/em&gt; attribute.&lt;/p&gt;
+&lt;script src="https://gist.github.com/ash30/08ab5a96d7cfb8d5c8fad58ffea93970.js"&gt;&lt;/script&gt;
+
+&lt;p&gt;Obligatory meta class warning: you better be sure you really need todo this...&lt;/p&gt;
+&lt;h2&gt;References&lt;/h2&gt;
+&lt;p&gt;http://www.cafepy.com/article/python_attributes_and_methods/python_attributes_and_methods.pdf&lt;/p&gt;</content><category term="Python"></category></entry><entry><title>Use Unittests to Explore 3rd Party APIs</title><link href="http://ashleyarthur.co.uk/use-unittests-to-explore-3rd-party-apis.html" rel="alternate"></link><published>2017-03-10T00:00:00+01:00</published><updated>2017-03-10T00:00:00+01:00</updated><author><name>Ashley Arthur</name></author><id>tag:ashleyarthur.co.uk,2017-03-10:/use-unittests-to-explore-3rd-party-apis.html</id><summary type="html">&lt;p&gt;One of the ideas I've adopted recently is to use unittests to assert the contract between you and a 3rd party API.
+It's pretty normal to explore api usage in the REPL but by writing it formally as a series of tests you can record
+your findings and review them …&lt;/p&gt;</summary><content type="html">&lt;p&gt;One of the ideas I've adopted recently is to use unittests to assert the contract between you and a 3rd party API.
+It's pretty normal to explore api usage in the REPL but by writing it formally as a series of tests you can record
+your findings and review them next time. Even better, you can tests your assumptions if the library ever changes.&lt;/p&gt;
+&lt;p&gt;FileIO is always a little platfrom specific, even with cross platform librarys like
+python's &lt;code&gt;os.path&lt;/code&gt;. I was tasked recently with porting some tools to windows and found myself
+questioning some of my long held assumptions when working with file paths. The obvious question
+is what happens with all the backslashes?&lt;/p&gt;
+&lt;p&gt;Without futher ado:&lt;/p&gt;
+&lt;script src="https://gist.github.com/ash30/cb2e77610bfbd789767ff9eb3ee2d599.js"&gt;&lt;/script&gt;</content><category term="Python"></category></entry><entry><title>Restoring ViewControllers and their Data sources</title><link href="http://ashleyarthur.co.uk/restoring-viewcontrollers-and-their-data-sources.html" rel="alternate"></link><published>2016-11-25T00:00:00+01:00</published><updated>2016-11-25T00:00:00+01:00</updated><author><name>Ashley Arthur</name></author><id>tag:ashleyarthur.co.uk,2016-11-25:/restoring-viewcontrollers-and-their-data-sources.html</id><summary type="html">&lt;p&gt;The traditional flow for restoring view controllers in UIKit goes likes this:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;(Required) Assign restoration identifiers to the view controllers&lt;/li&gt;
+&lt;li&gt;(Required) Tell iOS how to create or locate new view controller objects at launch time.&lt;/li&gt;
+&lt;li&gt;(Optional) Encode current State for later restoration&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Recreating the hierarchy of view controllers is indeed …&lt;/p&gt;</summary><content type="html">&lt;p&gt;The traditional flow for restoring view controllers in UIKit goes likes this:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;(Required) Assign restoration identifiers to the view controllers&lt;/li&gt;
+&lt;li&gt;(Required) Tell iOS how to create or locate new view controller objects at launch time.&lt;/li&gt;
+&lt;li&gt;(Optional) Encode current State for later restoration&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Recreating the hierarchy of view controllers is indeed easy and mostly automated but a lot of the articles out there gloss over how to restore their dependencies (hint: Grabbing references to singletons in the VC’s decodeRestorableState method is not the correct answer!)&lt;/p&gt;
+&lt;p&gt;Normally you pass dependencies like a baton between controllers. When restoring a controller, the segue isn’t called and you get an ‘empty’ controller and its up to you to restore the dependencies. It turns out the data source can adopt the same state restoring protocol as the view controller and come along for the ride.  &lt;/p&gt;
+&lt;h2&gt;Assign restoration ids for dependencies&lt;/h2&gt;
+&lt;p&gt;Normally as apart of the app launch you’ll have some code to initialise backing data sources for your view controllers. As a small extension to this routine, we also now have to give them an ID so that the VC’s can indirectly reference them on app restore.&lt;/p&gt;
+&lt;p&gt;The app delegate method &lt;strong&gt;willFinishLaunchingWithOptions&lt;/strong&gt; is called after bootstrapping but before the restoration process so is a good place to register objects. &lt;/p&gt;
+&lt;script src="https://gist.github.com/ash30/39d74d475fa54541515a5298237b8fc2.js"&gt;&lt;/script&gt;
+
+&lt;h2&gt;Tell iOS how to create or locate the dependency&lt;/h2&gt;
+&lt;p&gt;Any registered dependency must conform to ‘UIStateRestoring’ protocol (UIViewControllers automatically conform to this) and allows you to define a restoration class&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kr"&gt;optional&lt;/span&gt; &lt;span class="kd"&gt;var&lt;/span&gt; &lt;span class="nv"&gt;objectRestorationClass&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="bp"&gt;UIObjectRestoration&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="kr"&gt;Type&lt;/span&gt;&lt;span class="p"&gt;?&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt; &lt;span class="kr"&gt;get&lt;/span&gt; &lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;If you return nil from this method, UIKIT assumes the app startup code recreated the dependency already and will be able to find it as you’ve registered it to a restoration id.&lt;/p&gt;
+&lt;p&gt;If you do specify a restoration class, it needs to define the following static method:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kd"&gt;static&lt;/span&gt; &lt;span class="kd"&gt;func&lt;/span&gt; &lt;span class="nf"&gt;object&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;withRestorationIdentifierPath&lt;/span&gt; &lt;span class="n"&gt;identifierComponents&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="nb"&gt;String&lt;/span&gt;&lt;span class="p"&gt;],&lt;/span&gt; &lt;span class="n"&gt;coder&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="bp"&gt;NSCoder&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;-&amp;gt;&lt;/span&gt; &lt;span class="bp"&gt;UIStateRestoring&lt;/span&gt;&lt;span class="p"&gt;?&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;It can return a reference to a global, init a new instance or return nil if no restoration is possible. &lt;/p&gt;
+&lt;h2&gt;Restoring the Dependency as part of the Controller Decode Process&lt;/h2&gt;
+&lt;p&gt;Now when you restore the view controllers state, any request to decode the datasources’s restoration id will simply be passed the registered instance. Voila! You can now reconstruct the VC’s dependencies.&lt;/p&gt;
+&lt;script src="https://gist.github.com/ash30/62733c8e8139b0b1e67c3ab615a59e7c.js"&gt;&lt;/script&gt;
+
+&lt;p&gt;The one draw back to this approach, as others have noted, is how it separates Controller Restoration and Dependency Restoration into two distinct phases. You’ve just lost your paddle if you’ve declared your dependencies as const. I think this hints at UIKits own opinion that controllers don’t actually own their datasources and so should be declared weakly.&lt;/p&gt;
+&lt;h2&gt;References&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://developer.apple.com/videos/play/wwdc2013/222/"&gt;https://developer.apple.com/videos/play/wwdc2013/222/&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</content><category term="Swift"></category><category term="iOS"></category></entry><entry><title>Note to Unowned Self</title><link href="http://ashleyarthur.co.uk/note-to-unowned-self.html" rel="alternate"></link><published>2016-11-20T00:00:00+01:00</published><updated>2016-11-20T00:00:00+01:00</updated><author><name>Ashley Arthur</name></author><id>tag:ashleyarthur.co.uk,2016-11-20:/note-to-unowned-self.html</id><summary type="html">&lt;p&gt;Its easy to think that the answer to all closure woes is to just declare self unowned - no more reference cycles for me!
+However this is a very easy way to crash! Been there, done that, never again. &lt;/p&gt;
+&lt;p&gt;let me translate what 'unowned' means: &lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;I am not the owner of …&lt;/p&gt;&lt;/blockquote&gt;</summary><content type="html">&lt;p&gt;Its easy to think that the answer to all closure woes is to just declare self unowned - no more reference cycles for me!
+However this is a very easy way to crash! Been there, done that, never again. &lt;/p&gt;
+&lt;p&gt;let me translate what 'unowned' means: &lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;I am not the owner of this reference but I am &lt;strong&gt;100%&lt;/strong&gt; sure it will exist when I need it.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Said like that, you can see thats a pretty sizeable assumption! &lt;/p&gt;
+&lt;p&gt;A Weak reference, most of the time, will be a better bet because it makes you deal with possiblity of nil. &lt;/p&gt;</content><category term="Swift"></category><category term="iOS"></category></entry><entry><title>Python Bindings for TargetProcess</title><link href="http://ashleyarthur.co.uk/python-bindings-for-targetprocess.html" rel="alternate"></link><published>2016-05-28T00:00:00+02:00</published><updated>2016-05-28T00:00:00+02:00</updated><author><name>Ashley Arthur</name></author><id>tag:ashleyarthur.co.uk,2016-05-28:/python-bindings-for-targetprocess.html</id><summary type="html">&lt;p&gt;Where can you find them? In one of my side projects: &lt;a href='https://github.com/ash30/tpapi'&gt;tpapi&lt;/a&gt; - an unoffical python client for TargetProcess. It takes care of interacting with the REST api and returns nice model objects
+for you to interact with. Some useful features worth mentioning:&lt;/p&gt;
+&lt;h3&gt;Transparent Pagination of Resource Requests&lt;/h3&gt;
+&lt;p&gt;Every collection of …&lt;/p&gt;</summary><content type="html">&lt;p&gt;Where can you find them? In one of my side projects: &lt;a href='https://github.com/ash30/tpapi'&gt;tpapi&lt;/a&gt; - an unoffical python client for TargetProcess. It takes care of interacting with the REST api and returns nice model objects
+for you to interact with. Some useful features worth mentioning:&lt;/p&gt;
+&lt;h3&gt;Transparent Pagination of Resource Requests&lt;/h3&gt;
+&lt;p&gt;Every collection of entities is actually a generator which will lazily send http requests
+as needed. This way we can expose a standard iterator interface over paginated resources.&lt;/p&gt;
+&lt;h3&gt;Nested Model Lookup&lt;/h3&gt;
+&lt;p&gt;For resource or collection attributes we return an iterator over the correct class automatically
+so you can continue to chain queries or pluck values.&lt;/p&gt;
+&lt;p&gt;Theres also a gist showcasing usage: &lt;a href="https://gist.github.com/ash30/cfebdf200df7e96242755c80c06ade91"&gt;here&lt;/a&gt;&lt;/p&gt;</content><category term="Python"></category><category term="RestAPIs"></category></entry><entry><title>Testing Mac Gatekeeper</title><link href="http://ashleyarthur.co.uk/testing-mac-gatekeeper.html" rel="alternate"></link><published>2015-04-29T00:00:00+02:00</published><updated>2015-04-29T00:00:00+02:00</updated><author><name>Ashley Arthur</name></author><id>tag:ashleyarthur.co.uk,2015-04-29:/testing-mac-gatekeeper.html</id><summary type="html">&lt;p&gt;Gatekeeper on macOS guards against the execution and installation of applications from unknown sources.
+In order to pass this security check an application needs to be correctly signed which means its
+a good requirement to check before a release.&lt;/p&gt;
+&lt;p&gt;The key gotcha to watch out for when testing is to …&lt;/p&gt;</summary><content type="html">&lt;p&gt;Gatekeeper on macOS guards against the execution and installation of applications from unknown sources.
+In order to pass this security check an application needs to be correctly signed which means its
+a good requirement to check before a release.&lt;/p&gt;
+&lt;p&gt;The key gotcha to watch out for when testing is to ensure the executable has been quarantined.
+By that I mean it has the ''com.apple.quarantine'' extended attribute present as Gatekeeper 
+is triggered specifically at the first time you execute or install a quarantined file.&lt;/p&gt;
+&lt;p&gt;To verify the existence of the quarantine flag, you can show 'ls' output in terminal and look
+for the '@' at the end of the permission fields. Better yet you can use the 'xattr' command to
+show any extended attributes that exist on a file.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;$ xattr /path/to/file
+
+com.apple.quarantine
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;A programatic method to verify if the application's signature will pass gate keeper is to run the 'spctl' command.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;spctl --assess --type install ./path/to/file
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Spctl will exit zero on success or return one if anything failed.&lt;/p&gt;
+&lt;p&gt;Additionally you can check the actual signature use 'pkgutil' for futher details.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;pkgutil --check-signature ./path/to/file
+&lt;/pre&gt;&lt;/div&gt;</content><category term="Testing"></category><category term="OSX"></category></entry><entry><title>Python Descriptor Notes</title><link href="http://ashleyarthur.co.uk/python-descriptor-notes.html" rel="alternate"></link><published>2014-03-11T00:00:00+01:00</published><updated>2014-03-11T00:00:00+01:00</updated><author><name>Ashley Arthur</name></author><id>tag:ashleyarthur.co.uk,2014-03-11:/python-descriptor-notes.html</id><summary type="html">&lt;ul&gt;
+&lt;li&gt;Descriptors are any object that conform to the descriptor protocol __get__,__set__ and __del__. Properties are a common example&lt;/li&gt;
+&lt;li&gt;Descriptors are class level objects and you must use the obj reference passed to it in order to access the parent object.&lt;/li&gt;
+&lt;li&gt;This is because the descriptor protocol methods are invoked …&lt;/li&gt;&lt;/ul&gt;</summary><content type="html">&lt;ul&gt;
+&lt;li&gt;Descriptors are any object that conform to the descriptor protocol __get__,__set__ and __del__. Properties are a common example&lt;/li&gt;
+&lt;li&gt;Descriptors are class level objects and you must use the obj reference passed to it in order to access the parent object.&lt;/li&gt;
+&lt;li&gt;This is because the descriptor protocol methods are invoked via an objects __getattribute__ - so be careful when overriding!&lt;/li&gt;
+&lt;li&gt;Weirdly hasattr returns false for testing if an class objects holds a specific 
+property.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;Example&lt;/h2&gt;
+&lt;p&gt;&lt;script src="https://gist.github.com/ash30/cca24018f5153cf51b8c674d3fb94f5f.js"&gt;&lt;/script&gt;&lt;/p&gt;
+&lt;h2&gt;References&lt;/h2&gt;
+&lt;p&gt;&lt;a href="www.docs.python.org/2/howto/descriptor.html"&gt;www.docs.python.org/2/howto/descriptor.html&lt;/a&gt;&lt;/p&gt;</content><category term="Python"></category></entry></feed>

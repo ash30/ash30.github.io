@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <title>Ashley Arthur | articles tagged "iOS"</title>
+    <title>Ashley Arthur | articles tagged "Swinject"</title>
     <link rel="shortcut icon" type="image/png" href="http://ashleyarthur.co.uk/favicon.png">
     <link rel="shortcut icon" type="image/x-icon" href="http://ashleyarthur.co.uk/favicon.ico">
     <link href="http://ashleyarthur.co.uk/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="Ashley Arthur Full Atom Feed" />
@@ -15,7 +15,7 @@
     <header>
         <nav>
             <ul>
-                <li class="ephemeral selected"><a href="http://ashleyarthur.co.uk/tag/ios.html">iOS</a></li>
+                <li class="ephemeral selected"><a href="http://ashleyarthur.co.uk/tag/swinject.html">Swinject</a></li>
                 <li><a href="http://ashleyarthur.co.uk">Home</a></li>
                 <li><a href="archives.html">Archives</a></li>
                 <li><a href="https://github.com/ash30">Github</a></li>
@@ -190,83 +190,8 @@ between different features. Here's a non exhaustive list of some of benefits I'v
                     &nbsp;&middot;&nbsp;<a href="http://ashleyarthur.co.uk/category/tech.html" rel="tag">Tech</a>
                     &nbsp;&middot;
                     &nbsp;<a href="http://ashleyarthur.co.uk/tag/swift.html" class="tags">Swift</a>
-                    &nbsp;<a href="http://ashleyarthur.co.uk/tag/ios.html" class="tags selected">iOS</a>
-                    &nbsp;<a href="http://ashleyarthur.co.uk/tag/swinject.html" class="tags">Swinject</a>
-                </div>
-            </article>            <h4 class="date">Nov 25, 2016</h4>
-
-            <article class="post">
-                <h2 class="title">
-                    <a href="http://ashleyarthur.co.uk/restoring-viewcontrollers-and-their-data-sources.html" rel="bookmark" title="Permanent Link to &quot;Restoring ViewControllers and their Data sources&quot;">Restoring ViewControllers and their Data sources</a>
-                </h2>
-
-                <p>The traditional flow for restoring view controllers in UIKit goes likes this:</p>
-<ol>
-<li>(Required) Assign restoration identifiers to the view controllers</li>
-<li>(Required) Tell iOS how to create or locate new view controller objects at launch time.</li>
-<li>(Optional) Encode current State for later restoration</li>
-</ol>
-<p>Recreating the hierarchy of view controllers is indeed easy and mostly automated but a lot of the articles out there gloss over how to restore their dependencies (hint: Grabbing references to singletons in the VC’s decodeRestorableState method is not the correct answer!)</p>
-<p>Normally you pass dependencies like a baton between controllers. When restoring a controller, the segue isn’t called and you get an ‘empty’ controller and its up to you to restore the dependencies. It turns out the data source can adopt the same state restoring protocol as the view controller and come along for the ride.  </p>
-<h2>Assign restoration ids for dependencies</h2>
-<p>Normally as apart of the app launch you’ll have some code to initialise backing data sources for your view controllers. As a small extension to this routine, we also now have to give them an ID so that the VC’s can indirectly reference them on app restore.</p>
-<p>The app delegate method <strong>willFinishLaunchingWithOptions</strong> is called after bootstrapping but before the restoration process so is a good place to register objects. </p>
-<script src="https://gist.github.com/ash30/39d74d475fa54541515a5298237b8fc2.js"></script>
-
-<h2>Tell iOS how to create or locate the dependency</h2>
-<p>Any registered dependency must conform to ‘UIStateRestoring’ protocol (UIViewControllers automatically conform to this) and allows you to define a restoration class</p>
-<div class="highlight"><pre><span></span><span class="kr">optional</span> <span class="kd">var</span> <span class="nv">objectRestorationClass</span><span class="p">:</span> <span class="bp">UIObjectRestoration</span><span class="p">.</span><span class="kr">Type</span><span class="p">?</span> <span class="p">{</span> <span class="kr">get</span> <span class="p">}</span>
-</pre></div>
-
-
-<p>If you return nil from this method, UIKIT assumes the app startup code recreated the dependency already and will be able to find it as you’ve registered it to a restoration id.</p>
-<p>If you do specify a restoration class, it needs to define the following static method:</p>
-<div class="highlight"><pre><span></span><span class="kd">static</span> <span class="kd">func</span> <span class="nf">object</span><span class="p">(</span><span class="n">withRestorationIdentifierPath</span> <span class="n">identifierComponents</span><span class="p">:</span> <span class="p">[</span><span class="nb">String</span><span class="p">],</span> <span class="n">coder</span><span class="p">:</span> <span class="bp">NSCoder</span><span class="p">)</span> <span class="p">-&gt;</span> <span class="bp">UIStateRestoring</span><span class="p">?</span>
-</pre></div>
-
-
-<p>It can return a reference to a global, init a new instance or return nil if no restoration is possible. </p>
-<h2>Restoring the Dependency as part of the Controller Decode Process</h2>
-<p>Now when you restore the view controllers state, any request to decode the datasources’s restoration id will simply be passed the registered instance. Voila! You can now reconstruct the VC’s dependencies.</p>
-<script src="https://gist.github.com/ash30/62733c8e8139b0b1e67c3ab615a59e7c.js"></script>
-
-<p>The one draw back to this approach, as others have noted, is how it separates Controller Restoration and Dependency Restoration into two distinct phases. You’ve just lost your paddle if you’ve declared your dependencies as const. I think this hints at UIKits own opinion that controllers don’t actually own their datasources and so should be declared weakly.</p>
-<h2>References</h2>
-<ul>
-<li><a href="https://developer.apple.com/videos/play/wwdc2013/222/">https://developer.apple.com/videos/play/wwdc2013/222/</a></li>
-</ul>
-                <div class="clear"></div>
-
-                <div class="info">
-                    <a href="http://ashleyarthur.co.uk/restoring-viewcontrollers-and-their-data-sources.html">posted at 00:00</a>
-                    &nbsp;&middot;&nbsp;<a href="http://ashleyarthur.co.uk/category/tech.html" rel="tag">Tech</a>
-                    &nbsp;&middot;
-                    &nbsp;<a href="http://ashleyarthur.co.uk/tag/swift.html" class="tags">Swift</a>
-                    &nbsp;<a href="http://ashleyarthur.co.uk/tag/ios.html" class="tags selected">iOS</a>
-                </div>
-            </article>            <h4 class="date">Nov 20, 2016</h4>
-
-            <article class="post">
-                <h2 class="title">
-                    <a href="http://ashleyarthur.co.uk/note-to-unowned-self.html" rel="bookmark" title="Permanent Link to &quot;Note to Unowned Self&quot;">Note to Unowned Self</a>
-                </h2>
-
-                <p>Its easy to think that the answer to all closure woes is to just declare self unowned - no more reference cycles for me!
-However this is a very easy way to crash! Been there, done that, never again. </p>
-<p>let me translate what 'unowned' means: </p>
-<blockquote>
-<p>I am not the owner of this reference but I am <strong>100%</strong> sure it will exist when I need it.</p>
-</blockquote>
-<p>Said like that, you can see thats a pretty sizeable assumption! </p>
-<p>A Weak reference, most of the time, will be a better bet because it makes you deal with possiblity of nil. </p>
-                <div class="clear"></div>
-
-                <div class="info">
-                    <a href="http://ashleyarthur.co.uk/note-to-unowned-self.html">posted at 00:00</a>
-                    &nbsp;&middot;&nbsp;<a href="http://ashleyarthur.co.uk/category/tech.html" rel="tag">Tech</a>
-                    &nbsp;&middot;
-                    &nbsp;<a href="http://ashleyarthur.co.uk/tag/swift.html" class="tags">Swift</a>
-                    &nbsp;<a href="http://ashleyarthur.co.uk/tag/ios.html" class="tags selected">iOS</a>
+                    &nbsp;<a href="http://ashleyarthur.co.uk/tag/ios.html" class="tags">iOS</a>
+                    &nbsp;<a href="http://ashleyarthur.co.uk/tag/swinject.html" class="tags selected">Swinject</a>
                 </div>
             </article>
 
